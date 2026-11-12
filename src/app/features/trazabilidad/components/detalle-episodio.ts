@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { MatCardModule } from '@angular/material/card';
 import { ETAPA_POR_ID } from '../../../core/data/catalogos';
 import { estadoPublico, tiemposClave } from '../../../core/domain/indicadores';
+import { codigoVerificacion } from '../../../core/domain/privacidad';
 import { Alerta, Episodio, EventoEpisodio } from '../../../core/models/urgencias.models';
 import { OrdenVisible } from '../../../core/services/urgencias.store';
 import { HoraPipe } from '../../../shared/pipes/hora.pipe';
@@ -20,6 +21,7 @@ const MIN = 60_000;
   templateUrl: './detalle-episodio.html',
 })
 export class DetalleEpisodio {
+  protected readonly verificacion = computed(() => codigoVerificacion(this.episodio().turno));
   readonly episodio = input.required<Episodio>();
   readonly eventos = input.required<EventoEpisodio[]>();
   readonly ordenes = input.required<OrdenVisible[]>();

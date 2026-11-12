@@ -1,41 +1,34 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { estadoPublico } from '../../core/domain/indicadores';
+import { consultarTurno, ResultadoConsulta } from '../../core/domain/privacidad';
 import { UrgenciasStore } from '../../core/services/urgencias.store';
-import { ConsultaTurno, ResultadoConsulta } from './components/consulta-turno';
-import { SalaEspera, TurnoPublico } from './components/sala-espera';
+import { ConsultaTurno } from './components/consulta-turno';
 
 @Component({
   selector: 'app-acompanantes-page',
-  imports: [ConsultaTurno, SalaEspera],
+  imports: [ConsultaTurno],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="pagina pila">
       <header class="encabezado-pagina">
         <div>
           <h1>Acompañantes</h1>
-          <p class="texto-suave">Vista demostrativa limitada: solo código de turno y estado genérico</p>
+          <p class="texto-suave">
+            Vista demostrativa limitada: cada acompañante consulta solo el turno de su paciente con el código y la
+            verificación del tiquete. No se listan turnos ni estados de otros pacientes.
+          </p>
         </div>
       </header>
-      <div class="grid-acompanantes">
-        <app-sala-espera [turnos]="turnos()" [actualizado]="store.ahora()" />
-        <app-consulta-turno [(consulta)]="consulta" [resultado]="resultado()" />
-      </div>
+      <app-consulta-turno [(turno)]="turno" [(verificacion)]="verificacion" [resultado]="resultado()" />
     </section>
   `,
 })
 export class AcompanantesPage {
-  protected readonly store = inject(UrgenciasStore);
-  protected readonly consulta = signal('');
-
-  protected readonly turnos = computed<TurnoPublico[]>(() =>
-    this.store.activos().map((e) => ({ turno: e.turno, estado: estadoPublico(e) })),
-  );
+  private readonly store = inject(UrgenciasStore);
+  protected readonly turno = signal('');
+  protected readonly verificacion = signal('');
 
   protected readonly resultado = computed<ResultadoConsulta | null>(() => {
-    if (!this.consulta().trim()) return null;
-    const episodio = this.store.buscar(this.consulta());
-    if (!episodio) return { tipo: 'no-encontrado' };
-    if (episodio.egreso != null) return { tipo: 'finalizado', turno: episodio.turno };
-    return { tipo: 'activo', turno: episodio.turno, estado: estadoPublico(episodio) };
+    if (!this.turno().trim() || this.verificacion().trim().length < 4) return null;
+    return consultarTurno(this.store.episodios(), this.turno(), this.verificacion());
   });
 }

@@ -5,6 +5,7 @@
       <div class="pila-sm crece">
         <div class="fila-sm">
           <span class="turno-grande">{{ episodio().turno }}</span>
+          <span class="texto-suave">Verificación del tiquete: <strong>{{ verificacion() }}</strong></span>
           <app-insignia-triage [nivel]="episodio().triage" />
           @if (alerta(); as a) {
             <app-insignia-alerta [nivel]="a.nivel" [motivo]="a.motivo" />

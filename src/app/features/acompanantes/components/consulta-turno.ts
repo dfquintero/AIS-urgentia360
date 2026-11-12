@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-
-export type ResultadoConsulta =
-  | { tipo: 'activo'; turno: string; estado: string }
-  | { tipo: 'finalizado'; turno: string }
-  | { tipo: 'no-encontrado' };
+import { ResultadoConsulta } from '../../../core/domain/privacidad';
 
 @Component({
   selector: 'app-consulta-turno',
@@ -15,10 +11,14 @@ export type ResultadoConsulta =
     <div class="movil" aria-label="Vista móvil para acompañantes">
       <div class="movil-pantalla pila">
         <h2 class="movil-titulo">Consulta de turno</h2>
-        <p class="texto-suave">Escriba el código impreso en el tiquete del digiturno.</p>
+        <p class="texto-suave">Escriba los dos códigos impresos en el tiquete del digiturno.</p>
         <mat-form-field subscriptSizing="dynamic">
           <mat-label>Código de turno</mat-label>
-          <input matInput [(ngModel)]="consulta" placeholder="TURNO-FICT-00198 o 198" autocomplete="off" />
+          <input matInput [(ngModel)]="turno" placeholder="TURNO-FICT-00198" autocomplete="off" />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Código de verificación</mat-label>
+          <input matInput [(ngModel)]="verificacion" inputmode="numeric" maxlength="4" placeholder="4 dígitos" autocomplete="off" />
         </mat-form-field>
         @switch (resultado()?.tipo) {
           @case ('activo') {
@@ -34,15 +34,16 @@ export type ResultadoConsulta =
             </div>
           }
           @case ('no-encontrado') {
-            <p class="texto-alerta">No encontramos ese turno. Verifique el código.</p>
+            <p class="texto-alerta">No encontramos un turno con esos datos. Verifique los códigos del tiquete.</p>
           }
         }
-        <p class="movil-nota">Por privacidad no se muestran nombres ni información clínica. Para más detalles acérquese al punto de información.</p>
+        <p class="movil-nota">Solo se muestra el estado general del turno consultado: no se listan otros pacientes ni información clínica. Para más detalles acérquese al punto de información.</p>
       </div>
     </div>
   `,
 })
 export class ConsultaTurno {
-  readonly consulta = model('');
+  readonly turno = model('');
+  readonly verificacion = model('');
   readonly resultado = input<ResultadoConsulta | null>(null);
 }

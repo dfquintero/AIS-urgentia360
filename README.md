@@ -132,8 +132,9 @@ La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes
 4. **Trazabilidad** (`#/trazabilidad`): los tres casos de demostración de la base (demora post-triage, órdenes sin
    resultado y episodio abierto). Cada episodio muestra hitos, órdenes y la línea de tiempo con fuente
    (Sofía/Digiturno, HIS/Athenea, LIS, PACS/RIS, todas referenciales), rol y origen del registro.
-5. **Acompañantes** (`#/acompanantes`): solo código de turno y estado genérico. En la vista móvil se puede escribir
-   el código completo (`TURNO-FICT-00085`) o solo el número (`85`).
+5. **Acompañantes** (`#/acompanantes`): el acompañante escribe el código completo del turno (`TURNO-FICT-00085`) y
+   el código de verificación de 4 dígitos del tiquete (en la demo se ve en Trazabilidad, junto al QR). Solo ve el
+   estado general de ese turno; no se listan otros pacientes.
 
 Los registros manuales viven en memoria: **al recargar la página se pierden** (también desde **Ir a… → Descartar
 registros manuales**).
@@ -184,7 +185,7 @@ de seguir la reproducción desde ese instante.
 | `#/operacion` | Medicina, enfermería, admisiones | Generar turno, escáner QR, tablero con alertas, bitácora |
 | `#/coordinacion` | Coordinación, analistas | KPIs, tiempos por etapa, cuello de botella, demanda, capacidad, umbrales y metas |
 | `#/trazabilidad` | Coordinación, analistas | Episodio de extremo a extremo y casos de demostración |
-| `#/acompanantes` | Acompañantes | Sala de espera y consulta móvil por código de turno, sin datos clínicos |
+| `#/acompanantes` | Acompañantes | Consulta móvil del turno propio con código de turno + código de verificación del tiquete (visible en Trazabilidad); no lista otros pacientes ni datos clínicos |
 
 ## Estructura
 
