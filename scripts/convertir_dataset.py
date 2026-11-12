@@ -126,6 +126,7 @@ def main(ruta_excel):
 
     datos = {
         'fuente': 'URGENTIA 360° · Base de datos sintética UNAL–Kantera 2026',
+        'sede': hoja(libro, 'EPISODIOS')[0]['sede_escenario'],
         'inicio': inicio.strftime('%Y-%m-%dT%H:%M:%S-05:00'),
         'corteMin': minutos(corte.strftime(FORMATO)),
         'episodios': episodios,

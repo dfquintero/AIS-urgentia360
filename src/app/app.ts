@@ -25,6 +25,7 @@ import { RedCifrada } from './shared/ui/red-cifrada';
       </div>
       <div class="barra-estado">
         <app-red-cifrada />
+        <span class="fuente-datos" title="Sede ficticia: flujo de referencia inspirado en la Clínica Universitaria Colombia (CUC)">{{ store.sede }} · ficticia</span>
         <span class="fuente-datos" [title]="store.fuente">{{ store.esRespaldo ? 'Datos de respaldo' : 'Base sintética UNAL–Kantera' }}</span>
         <span class="reloj" aria-label="Hora simulada de la reproducción">{{ reloj.ahora() | hora: 'reloj' }}</span>
         <button class="boton-barra" mat-stroked-button type="button" (click)="reloj.pausado.set(!reloj.pausado())">
@@ -57,7 +58,8 @@ import { RedCifrada } from './shared/ui/red-cifrada';
     </mat-tab-nav-panel>
 
     <footer class="pie">
-      Proyecto académico (UNAL) sin afiliación oficial con Keralty. Paleta basada en su manual de identidad corporativa.
+      {{ store.sede }}: sede ficticia, flujo de referencia inspirado en la Clínica Universitaria Colombia (CUC); no
+      reproduce sus volúmenes, dotación ni procesos. Proyecto académico (UNAL) sin afiliación oficial con Keralty. Paleta basada en su manual de identidad corporativa.
       {{ store.fuente }}: datos 100 % sintéticos; los sistemas citados (Sofía, Athenea, LIS, PACS/RIS) son referencias
       conceptuales, sin integración.
     </footer>

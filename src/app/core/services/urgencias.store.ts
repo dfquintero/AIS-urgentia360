@@ -34,6 +34,7 @@ export class UrgenciasStore {
   private readonly reloj = inject(RelojService);
   readonly ahora = this.reloj.ahora;
   readonly fuente = this.dataset.fuente;
+  readonly sede = this.dataset.sede;
   readonly esRespaldo = this.dataset.esRespaldo;
   readonly capacidad = this.dataset.capacidad;
   readonly corte = this.dataset.corte;

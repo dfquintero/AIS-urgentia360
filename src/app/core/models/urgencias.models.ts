@@ -89,6 +89,8 @@ export interface BloqueCapacidad {
 
 export interface Dataset {
   fuente: string;
+  /** Sede ficticia; flujo de referencia inspirado en la Clínica Universitaria Colombia (CUC). */
+  sede: string;
   esRespaldo: boolean;
   inicio: number;
   corte: number;

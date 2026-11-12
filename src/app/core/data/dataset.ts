@@ -18,6 +18,7 @@ const IDS_ETAPA = ETAPAS.map((e) => e.id);
 /** Formato compacto generado por scripts/convertir_dataset.py a partir del Excel UNAL–Kantera. */
 export interface DatasetCrudo {
   fuente: string;
+  sede?: string;
   inicio: string;
   corteMin: number;
   episodios: {
@@ -76,6 +77,7 @@ export function parsearDataset(c: DatasetCrudo): Dataset {
 
   return {
     fuente: c.fuente,
+    sede: c.sede ?? 'SEDE-DEMO-01',
     esRespaldo: false,
     inicio,
     corte: inicio + c.corteMin * MIN,
@@ -284,6 +286,7 @@ export function generarDatasetRespaldo(semilla = 360, total = 360): Dataset {
 
   return {
     fuente: 'Datos de respaldo generados en el navegador (estructura de la base UNAL–Kantera)',
+    sede: 'SEDE-DEMO-01',
     esRespaldo: true,
     inicio,
     corte,
