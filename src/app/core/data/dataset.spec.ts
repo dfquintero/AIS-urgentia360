@@ -11,4 +11,16 @@ describe('base de datos sintética', () => {
     expect(d.ordenes.every((o) => o.solicitud <= d.corte)).toBe(true);
   });
 
+
+  it('los hitos de los datos de respaldo son cronológicos (llegada ≤ entrada ≤ salida)', () => {
+    const d = generarDatasetRespaldo();
+    const inconsistentes = d.episodios.flatMap((e) =>
+      e.historial
+        .filter((r) => (r.entrada != null && r.entrada < r.llegada) || (r.entrada != null && r.salida != null && r.salida < r.entrada))
+        .map((r) => `${e.id}:${r.etapa}`),
+    );
+    expect(inconsistentes).toEqual([]);
+    expect(d.episodios.some((e) => e.triage === 'I' && e.historial.some((r) => r.etapa === 'ayudas'))).toBe(true);
+    expect(d.episodios.some((e) => e.triage === 'I' && !e.historial.some((r) => r.etapa === 'ayudas'))).toBe(true);
+  });
 });

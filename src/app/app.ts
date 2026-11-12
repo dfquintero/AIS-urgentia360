@@ -41,6 +41,9 @@ import { RedCifrada } from './shared/ui/red-cifrada';
         <app-red-cifrada />
         <span class="fuente-datos" title="Sede ficticia: flujo de referencia inspirado en la Clínica Universitaria Colombia (CUC)">{{ store.sede }} · ficticia</span>
         <span class="fuente-datos" [title]="store.fuente">{{ store.esRespaldo ? 'Datos de respaldo' : 'Base sintética UNAL–Kantera' }}</span>
+        @if (reloj.fueraDelPeriodo()) {
+          <span class="fuente-datos aviso-corte" title="La base sintética termina en el corte; después solo hay registros manuales">Fin de la reproducción (corte)</span>
+        }
         <span class="reloj" aria-label="Hora simulada de la reproducción">{{ reloj.ahora() | hora: 'reloj' }}</span>
         <button class="boton-barra" mat-stroked-button type="button" (click)="reloj.pausado.set(!reloj.pausado())">
           {{ reloj.pausado() ? '▶ Reanudar' : '❚❚ Pausa' }}
