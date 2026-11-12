@@ -83,12 +83,13 @@ const ETAPAS_MEDIBLES = ETAPAS.filter((e) => e.id !== 'punto0' && e.id !== 'egre
 /** Espera (llegada → entrada) y atención (entrada → salida) promedio por etapa, en minutos. */
 export function promediosPorEtapa(episodios: readonly Episodio[], ahora: number): PromedioEtapa[] {
   return ETAPAS_MEDIBLES.map((etapa) => {
-    const registros = episodios.flatMap((e) => e.historial.filter((r) => r.etapa === etapa.id));
+    const registros = episodios.flatMap((e) => e.historial.filter((r) => r.etapa === etapa.id).map((r) => ({ r, e })));
     const n = registros.length;
     const suma = registros.reduce(
-      (acc, r) => {
-        acc.espera += (r.entrada ?? ahora) - r.llegada;
-        acc.atencion += r.entrada != null ? (r.salida ?? ahora) - r.entrada : 0;
+      (acc, { r, e }) => {
+        const finEspera = r.entrada ?? r.salida ?? e.egreso ?? ahora;
+        acc.espera += Math.max(0, finEspera - r.llegada);
+        acc.atencion += r.entrada != null ? Math.max(0, (r.salida ?? e.egreso ?? ahora) - r.entrada) : 0;
         return acc;
       },
       { espera: 0, atencion: 0 },

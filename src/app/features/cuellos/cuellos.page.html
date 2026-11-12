@@ -1,0 +1,118 @@
+<section class="pagina pila">
+  <header class="encabezado-pagina">
+    <div>
+      <h1>Cuellos de botella</h1>
+      <p class="texto-suave">Dónde, cuándo y para quién se acumula la espera · datos hasta {{ store.ahora() | hora: 'fecha-hora' }}</p>
+    </div>
+    <mat-button-toggle-group hideSingleSelectionIndicator [value]="ventana()" (change)="ventana.set($event.value)" aria-label="Ventana de análisis">
+      <mat-button-toggle value="periodo">Todo el periodo</mat-button-toggle>
+      <mat-button-toggle value="72h">Últimas 72 h</mat-button-toggle>
+      <mat-button-toggle value="24h">Últimas 24 h</mat-button-toggle>
+    </mat-button-toggle-group>
+  </header>
+
+  @if (resumen(); as texto) {
+    <div class="resumen-cuello" role="status">
+      <strong>Hallazgo principal.</strong> {{ texto }}
+      <span class="texto-suave bloque">Análisis ilustrativo sobre datos sintéticos: no evalúa el desempeño real de la CUC ni sugiere conductas clínicas.</span>
+    </div>
+  }
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>1 · Ranking de etapas por espera</mat-card-title>
+      <mat-card-subtitle>Espera = llegada a la etapa → inicio de atención (en conducta: hasta el egreso efectivo). El p90 muestra la cola larga que el promedio esconde.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="tabla-contenedor">
+      <table class="tabla-simple tabla-ranking">
+        <thead>
+          <tr><th>#</th><th>Etapa</th><th>Promedio</th><th>Mediana</th><th>p90</th><th class="col-barra">Distribución (mediana → p90)</th><th>En cola ahora</th><th>n</th></tr>
+        </thead>
+        <tbody>
+          @for (r of ranking(); track r.id; let i = $index) {
+            <tr [class.fila-cuello]="i === 0">
+              <td>{{ i + 1 }}</td>
+              <td><strong>{{ r.nombre }}</strong></td>
+              <td class="numero">{{ r.promedio | minutos }}</td>
+              <td class="numero">{{ r.mediana | minutos }}</td>
+              <td class="numero">{{ r.p90 | minutos }}</td>
+              <td class="col-barra">
+                <div class="barra-rango">
+                  <span class="barra-mediana" [style.width.%]="((r.mediana ?? 0) / maximoRanking()) * 100"></span>
+                  <span class="barra-p90" [style.width.%]="(((r.p90 ?? 0) - (r.mediana ?? 0)) / maximoRanking()) * 100"></span>
+                </div>
+              </td>
+              <td class="numero">{{ r.enCola }}</td>
+              <td class="texto-suave">{{ r.n }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>2 · Cuándo se forma: etapa × hora de llegada</mat-card-title>
+      <mat-card-subtitle>Espera promedio según la hora (Bogotá) en que el paciente llega a cada etapa.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-grafico-mapa-horas [celdas]="horas()" />
+    </mat-card-content>
+  </mat-card>
+
+  <div class="grid-coordinacion">
+    <mat-card appearance="outlined" class="ancho-doble">
+      <mat-card-header>
+        <mat-card-title>3 · Dentro de ayudas diagnósticas</mat-card-title>
+        <mat-card-subtitle>Minutos promedio por paso, laboratorio frente a imagen.</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <app-grafico-ordenes [pasos]="ordenes()" />
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Órdenes detenidas ahora</mat-card-title>
+        <mat-card-subtitle>Por paso pendiente</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <table class="tabla-simple">
+          <thead><tr><th>Tipo</th><th>Sin toma</th><th>Sin resultado</th><th>Sin revisión</th></tr></thead>
+          <tbody>
+            @for (o of ordenes(); track o.tipo) {
+              <tr>
+                <td><strong>{{ o.tipo }}</strong></td>
+                <td class="numero">{{ o.pendientes.toma }}</td>
+                <td class="numero">{{ o.pendientes.resultado }}</td>
+                <td class="numero">{{ o.pendientes.revision }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>4 · Para quién: espera promedio por etapa</mat-card-title>
+      <mat-card-subtitle>Cortes por categoría de triage, tipo de demanda y grupo de edad (pase el cursor para ver n).</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="pila">
+      <app-tabla-calor [celdas]="porTriage()" etiquetaFilas="Triage" prefijo="T-" />
+      <app-tabla-calor [celdas]="porDemanda()" etiquetaFilas="Tipo de demanda" />
+      <app-tabla-calor [celdas]="porEdad()" etiquetaFilas="Grupo de edad" />
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>5 · Demanda frente a capacidad</mat-card-title>
+      <mat-card-subtitle>Turnos por médico simulado en cada bloque de 4 h (claro: valle) y espera a la valoración médica. Dotación hipotética, no de la CUC.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-grafico-carga [bloques]="carga()" />
+    </mat-card-content>
+  </mat-card>
+</section>

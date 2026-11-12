@@ -6,7 +6,7 @@ describe('matriz de roles simulados', () => {
   });
 
   it('el perfil directivo/analista solo ve indicadores agregados', () => {
-    expect(perfilDe('analista').vistas).toEqual(['coordinacion']);
+    expect(perfilDe('analista').vistas).toEqual(['cuellos', 'coordinacion']);
     expect(perfilDe('analista').configuraUmbrales).toBe(false);
   });
 

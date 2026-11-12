@@ -89,10 +89,11 @@ export class App {
   private readonly router = inject(Router);
   protected readonly perfiles = PERFILES;
   private readonly pestanas = [
+    { vista: 'cuellos', ruta: '/cuellos', titulo: 'Cuellos de botella' },
     { vista: 'operacion', ruta: '/operacion', titulo: 'Operación' },
     { vista: 'coordinacion', ruta: '/coordinacion', titulo: 'Coordinación' },
     { vista: 'trazabilidad', ruta: '/trazabilidad', titulo: 'Trazabilidad' },
-    { vista: 'acompanantes', ruta: '/acompanantes', titulo: 'Acompañantes' },
+    { vista: 'acompanantes', ruta: '/acompanantes', titulo: 'Acompañantes (demo)' },
   ];
   protected readonly pestanasVisibles = computed(() => this.pestanas.filter((t) => this.roles.puedeVer(t.vista)));
 

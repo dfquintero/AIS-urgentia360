@@ -237,3 +237,17 @@ mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
 .sala-turnos { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 .boton-rol.mat-mdc-outlined-button { --mat-button-outlined-container-shape: 999px; font-weight: 600; }
 .aviso-corte { background: var(--amarillo); color: #3d2f00; font-weight: 600; }
+
+// Cuellos de botella
+.resumen-cuello { padding: 14px 16px; border-radius: 12px; background: #fff; border: 1px solid var(--borde); border-left: 5px solid var(--rojo); font-size: 0.95rem; }
+.fila-cuello { background: var(--rojo-fondo); }
+.tabla-ranking td, .tabla-ranking th { white-space: nowrap; }
+.col-barra { width: 32%; min-width: 180px; }
+.barra-rango { display: flex; height: 12px; border-radius: 6px; background: #eef1f4; overflow: hidden; }
+.barra-mediana { background: var(--amarillo); }
+.barra-p90 { background: var(--rojo); opacity: 0.75; }
+.grafico-alto { height: 340px; }
+.tabla-calor { border-collapse: separate; border-spacing: 2px; font-size: 0.78rem; min-width: 640px; width: 100%; }
+.tabla-calor th { text-align: left; color: var(--texto-suave); font-weight: 600; padding: 4px 6px; white-space: nowrap; }
+.tabla-calor td { text-align: center; padding: 6px 4px; border-radius: 4px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.celda-oscura { color: #fff; font-weight: 600; }

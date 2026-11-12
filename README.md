@@ -179,6 +179,7 @@ de seguir la reproducción desde ese instante.
 
 | Ruta | Usuarios | Contenido |
 |---|---|---|
+| `#/cuellos` | Coordinación, analistas | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola), mapa etapa × hora, desglose de ayudas diagnósticas, cortes por triage/demanda/edad, carga vs capacidad y hallazgo en texto |
 | `#/operacion` | Medicina, enfermería, admisiones | Generar turno, escáner QR, tablero con alertas, bitácora |
 | `#/coordinacion` | Coordinación, analistas | KPIs, tiempos por etapa, cuello de botella, demanda, capacidad, umbrales y metas |
 | `#/trazabilidad` | Coordinación, analistas | Episodio de extremo a extremo y casos de demostración |
