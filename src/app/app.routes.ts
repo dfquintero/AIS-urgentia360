@@ -25,6 +25,13 @@ export const routes: Routes = [
     loadComponent: () => import('./features/cuellos/cuellos.page').then((m) => m.CuellosPage),
   },
   {
+    path: 'ans',
+    title: 'ANS · Urgentia 360',
+    canMatch: [accesoPorRol],
+    providers: [graficos],
+    loadComponent: () => import('./features/ans/ans.page').then((m) => m.AnsPage),
+  },
+  {
     path: 'operacion',
     title: 'Operación · Urgentia 360',
     canMatch: [accesoPorRol],

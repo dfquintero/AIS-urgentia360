@@ -18,6 +18,7 @@ import {
   Umbrales,
 } from '../models/urgencias.models';
 import { DatasetService } from './dataset.service';
+import { MetasAns, metasAnsIniciales } from '../domain/ans';
 import { RelojService } from './reloj.service';
 
 export interface OrdenVisible extends OrdenDiagnostica {
@@ -46,6 +47,10 @@ export class UrgenciasStore {
 
   readonly umbrales = signal<Umbrales>(structuredClone(UMBRALES_INICIALES) as Umbrales);
   readonly metasTriage = signal<MetasTriage>({ ...METAS_TRIAGE_INICIALES });
+  /** Metas de ANS no ligadas al triage (minutos; null = por definir). */
+  readonly metasAns = signal<MetasAns>(metasAnsIniciales());
+  /** Porcentaje de episodios dentro de la meta exigido para considerar cumplido un ANS (ilustrativo). */
+  readonly objetivoAns = signal(90);
 
   /** Episodios que ya generaron turno en el instante actual. */
   readonly episodios = computed<Episodio[]>(() => {
@@ -167,6 +172,10 @@ export class UrgenciasStore {
 
   actualizarMetaTriage(nivel: NivelTriageId, minutos: number | null): void {
     this.metasTriage.update((m) => ({ ...m, [nivel]: minutos == null ? null : Math.max(1, Math.round(minutos)) }));
+  }
+
+  actualizarMetaAns(id: string, minutos: number | null): void {
+    this.metasAns.update((m) => ({ ...m, [id]: minutos == null ? null : Math.max(0, Math.round(minutos)) }));
   }
 
   restablecerUmbrales(): void {

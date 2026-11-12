@@ -90,6 +90,7 @@ export class App {
   protected readonly perfiles = PERFILES;
   private readonly pestanas = [
     { vista: 'cuellos', ruta: '/cuellos', titulo: 'Cuellos de botella' },
+    { vista: 'ans', ruta: '/ans', titulo: 'ANS' },
     { vista: 'operacion', ruta: '/operacion', titulo: 'Operación' },
     { vista: 'coordinacion', ruta: '/coordinacion', titulo: 'Coordinación' },
     { vista: 'trazabilidad', ruta: '/trazabilidad', titulo: 'Trazabilidad' },

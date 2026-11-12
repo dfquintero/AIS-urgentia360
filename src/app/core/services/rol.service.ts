@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 
 export type RolUsuario = 'demo' | 'asistencial' | 'coordinacion' | 'analista' | 'acompanante';
-export type Vista = 'cuellos' | 'operacion' | 'coordinacion' | 'trazabilidad' | 'acompanantes';
+export type Vista = 'cuellos' | 'ans' | 'operacion' | 'coordinacion' | 'trazabilidad' | 'acompanantes';
 
 export interface PerfilRol {
   id: RolUsuario;
@@ -17,7 +17,7 @@ export const PERFILES: readonly PerfilRol[] = [
     id: 'demo',
     nombre: 'Demostración',
     descripcion: 'Todas las vistas, para presentar el prototipo',
-    vistas: ['cuellos', 'operacion', 'coordinacion', 'trazabilidad', 'acompanantes'],
+    vistas: ['cuellos', 'ans', 'operacion', 'coordinacion', 'trazabilidad', 'acompanantes'],
     configuraUmbrales: true,
   },
   {
@@ -31,14 +31,14 @@ export const PERFILES: readonly PerfilRol[] = [
     id: 'coordinacion',
     nombre: 'Coordinación de urgencias',
     descripcion: 'Cola, capacidad, demoras y umbrales',
-    vistas: ['cuellos', 'operacion', 'coordinacion', 'trazabilidad'],
+    vistas: ['cuellos', 'ans', 'operacion', 'coordinacion', 'trazabilidad'],
     configuraUmbrales: true,
   },
   {
     id: 'analista',
     nombre: 'Directivo / Analista',
     descripcion: 'Solo indicadores agregados',
-    vistas: ['cuellos', 'coordinacion'],
+    vistas: ['cuellos', 'ans', 'coordinacion'],
     configuraUmbrales: false,
   },
   {

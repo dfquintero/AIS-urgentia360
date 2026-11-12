@@ -1,0 +1,67 @@
+<section class="pagina pila">
+  <header class="encabezado-pagina">
+    <div>
+      <h1>Gestión de ANS</h1>
+      <p class="texto-suave">Cumplimiento por indicador hasta {{ store.ahora() | hora: 'fecha-hora' }} · separa obligaciones normativas, metas operativas y ANS contractuales</p>
+    </div>
+    <label class="objetivo-ans">
+      Objetivo de cumplimiento
+      <input type="number" min="1" max="100" [value]="store.objetivoAns()" [disabled]="!roles.perfil().configuraUmbrales" (change)="cambiarObjetivo($any($event.target).value)" aria-label="Objetivo de cumplimiento en porcentaje" />
+      % <span class="texto-suave">(ilustrativo)</span>
+    </label>
+  </header>
+
+  <div class="aviso aviso-ans" role="note">
+    Solo Triage I (inmediata) y II (≤ 30 min) son referencias normativas (Res. 5596 de 2015). Las metas operativas son
+    institucionales y están <strong>por definir</strong>: escriba un valor para simular su seguimiento. Los ANS
+    contractuales con entidades pagadoras no están disponibles (no se entregaron contratos ni fórmulas).
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Indicadores</mat-card-title>
+      <mat-card-subtitle>% de episodios dentro de la meta · un ANS cumple si alcanza el objetivo de {{ store.objetivoAns() }} %</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="tabla-contenedor">
+      <table class="tabla-simple tabla-ans">
+        <thead>
+          <tr><th>Indicador</th><th>Tipo</th><th>Meta (min)</th><th>Medidos</th><th>Dentro de meta</th><th class="col-barra">Cumplimiento</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          @for (f of filas(); track f.d.id) {
+            <tr>
+              <td><strong>{{ f.d.nombre }}</strong><span class="texto-suave bloque">{{ f.d.descripcion }} · {{ f.d.fuente }}</span></td>
+              <td><span class="insignia tipo-{{ f.d.tipo }}">{{ f.d.tipo }}</span></td>
+              <td>
+                @if (f.d.editable && roles.perfil().configuraUmbrales) {
+                  <input class="meta-ans" type="number" min="0" placeholder="Por definir" [value]="f.meta ?? ''" (change)="cambiarMeta(f.d, $any($event.target).value)" [attr.aria-label]="'Meta ' + f.d.nombre" />
+                } @else {
+                  {{ f.meta == null ? 'Por definir' : f.meta === 0 ? 'Inmediata' : f.meta }}
+                }
+              </td>
+              <td class="numero">{{ f.medidos }}</td>
+              <td class="numero">{{ f.cumplimiento == null ? '—' : f.cumplen }}</td>
+              <td class="col-barra">
+                @if (f.cumplimiento != null) {
+                  <div class="barra-ans"><span [style.width.%]="f.cumplimiento" [class.barra-ok]="f.cumplimiento >= store.objetivoAns()"></span></div>
+                  <span class="numero">{{ f.cumplimiento }} %</span>
+                } @else { <span class="texto-suave">—</span> }
+              </td>
+              <td><span class="insignia estado-ans estado-{{ f.estado === 'Cumple' ? 'ok' : f.estado === 'No cumple' ? 'rojo' : 'neutro' }}">{{ f.estado }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Tendencia diaria de cumplimiento</mat-card-title>
+      <mat-card-subtitle>Por día de generación del turno; solo indicadores con meta definida.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div echarts class="grafico" [options]="tendencia()"></div>
+    </mat-card-content>
+  </mat-card>
+</section>
