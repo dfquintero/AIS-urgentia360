@@ -16,6 +16,7 @@
       </mat-form-field>
       <button mat-stroked-button type="button" (click)="escaneoAleatorio()">Escaneo aleatorio</button>
     </div>
+    <app-lector-qr (leido)="codigo.set($event)" />
 
     @if (episodio(); as e) {
       <div class="escaneo-detalle">
@@ -88,7 +89,7 @@
     } @else if (codigo().trim()) {
       <p class="texto-suave">Código no encontrado entre los episodios activos.</p>
     } @else {
-      <p class="texto-suave">Escanee o escriba un código, use el escaneo aleatorio o seleccione un episodio en el tablero.</p>
+      <p class="texto-suave">Lea el QR con la cámara, escriba un código, use el escaneo aleatorio o seleccione un episodio en el tablero.</p>
     }
   </mat-card-content>
 </mat-card>

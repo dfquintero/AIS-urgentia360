@@ -99,6 +99,22 @@ hosting estático (GitHub Pages, Netlify, un servidor web interno). Las rutas us
   (la IP se consulta con `ipconfig` en Windows o `ip addr` / `ifconfig` en Linux y macOS).
   Puede ser necesario permitir el puerto 4200 en el firewall.
 
+### 6. Leer el QR con la cámara
+
+Operación (escáner) y Acompañantes tienen el botón **Leer QR con la cámara**: lee el QR del paciente
+(por ejemplo, el que aparece en Trazabilidad o en «Último turno generado») y llena el código de turno.
+En Acompañantes el código de verificación se sigue escribiendo a mano.
+
+El navegador solo permite la cámara en `localhost` o con HTTPS. Para usarla desde un celular de la
+misma red, levante la app con un certificado autofirmado:
+
+```bash
+npm start -- --host 0.0.0.0 --ssl
+```
+
+y abra `https://<IP-del-computador>:4200/#/acompanantes`. El navegador advertirá que el certificado
+no es de confianza: acepte continuar (solo para la demo) y conceda el permiso de cámara.
+
 ---
 
 ## Recorrido sugerido para una demostración
