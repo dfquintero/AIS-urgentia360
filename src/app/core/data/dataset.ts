@@ -199,7 +199,8 @@ export function generarDatasetRespaldo(semilla = 360, total = 360): Dataset {
     const turno = Math.min(periodo - 30, Math.floor((i / total) * periodo) + entre(rand, 0, 50));
     const tIni = turno + entre(rand, 2, 35);
     const tFin = tIni + entre(rand, 2, 8);
-    const adm = tFin + entre(rand, 3, 15);
+    // Triage I: atención inmediata; admisión y valoración coinciden con el fin del triage.
+    const adm = triage === 'I' ? tFin : tFin + entre(rand, 3, 15);
     const val = triage === 'I' ? tFin : adm + entre(rand, 10, triage === 'II' ? 45 : 160);
     const historial: RegistroEtapa[] = [
       { etapa: 'punto0', llegada: m(turno), entrada: m(turno), salida: m(turno), responsable: 'Sofía / Digiturno' },
