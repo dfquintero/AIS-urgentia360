@@ -235,3 +235,4 @@ mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
 .hito { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px; padding: 6px 10px; border-left: 3px solid var(--k-celeste); font-size: 0.85rem; }
 .sala-turno { font-size: 0.95rem; }
 .sala-turnos { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.boton-rol.mat-mdc-outlined-button { --mat-button-outlined-container-shape: 999px; font-weight: 600; }

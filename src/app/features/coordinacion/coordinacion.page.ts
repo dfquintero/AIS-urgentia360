@@ -4,6 +4,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NIVELES_TRIAGE } from '../../core/data/catalogos';
 import { bloqueDe, cuelloDeBotella, esperaPostTriage, formatoDuracion, promedio, promediosPorEtapa, tiemposClave } from '../../core/domain/indicadores';
 import { Episodio, NivelTriageId } from '../../core/models/urgencias.models';
+import { RolService } from '../../core/services/rol.service';
 import { UrgenciasStore } from '../../core/services/urgencias.store';
 import { HoraPipe } from '../../shared/pipes/hora.pipe';
 import { MinutosPipe } from '../../shared/pipes/minutos.pipe';
@@ -25,6 +26,7 @@ const BLOQUES_VISIBLES = 18;
 })
 export class CoordinacionPage {
   protected readonly store = inject(UrgenciasStore);
+  protected readonly roles = inject(RolService);
   protected readonly niveles = NIVELES_TRIAGE;
   protected readonly filtroTriage = signal<NivelTriageId | 'todas'>('todas');
   protected readonly filtroFranja = signal<'todas' | 'Pico simulado' | 'Valle simulado'>('todas');

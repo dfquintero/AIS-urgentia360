@@ -85,6 +85,7 @@
     </mat-card-content>
   </mat-card>
 
+  @if (roles.perfil().configuraUmbrales) {
   <app-panel-umbrales
     [umbrales]="store.umbrales()"
     [metas]="store.metasTriage()"
@@ -92,4 +93,7 @@
     (cambioMeta)="store.actualizarMetaTriage($event.nivel, $event.minutos)"
     (restablecer)="store.restablecerUmbrales()"
   />
+  } @else {
+    <p class="texto-suave">El perfil {{ roles.perfil().nombre }} consulta indicadores agregados; los umbrales los configura coordinación.</p>
+  }
 </section>

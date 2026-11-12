@@ -105,6 +105,16 @@ hosting estático (GitHub Pages, Netlify, un servidor web interno). Las rutas us
 
 La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes del corte de la simulación) a 10×.
 
+1. **Rol simulado** (botón "Rol: …" del encabezado, sin login real): cada perfil ve solo sus vistas, según la
+   matriz sugerida por Kantera (no es un esquema de permisos aprobado):
+
+   | Rol | Vistas |
+   |---|---|
+   | Demostración | Todas |
+   | Médico / Enfermería | Operación, Trazabilidad |
+   | Coordinación de urgencias | Operación, Coordinación (con umbrales), Trazabilidad |
+   | Directivo / Analista | Coordinación (solo indicadores agregados) |
+   | Acompañante | Acompañantes |
 1. **Controles del encabezado:** pausa, velocidad (1× a 300×) y **Ir a…** para saltar al inicio del periodo, a un
    pico de demanda o al corte (15 oct, 00:00), donde quedan los 10 episodios abiertos de la base.
 2. **Operación** (`#/operacion`):
