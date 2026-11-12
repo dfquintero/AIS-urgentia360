@@ -1,0 +1,113 @@
+<div class="pila">
+  <mat-card appearance="outlined">
+    <mat-card-content class="detalle-cabecera">
+      <app-qr-paciente [codigo]="episodio().turno" [tamano]="120" />
+      <div class="pila-sm crece">
+        <div class="fila-sm">
+          <span class="turno-grande">{{ episodio().turno }}</span>
+          <app-insignia-triage [nivel]="episodio().triage" />
+          @if (alerta(); as a) {
+            <app-insignia-alerta [nivel]="a.nivel" [motivo]="a.motivo" />
+          }
+        </div>
+        <span class="texto-suave">{{ episodio().id }} · {{ episodio().grupoEdad }} años · {{ episodio().demanda }} · médico {{ episodio().responsable }}</span>
+        <span>
+          Estado: <strong>{{ estado() }}</strong>
+          @if (episodio().destino) {
+            · destino: <strong>{{ episodio().destino }}</strong>
+          }
+        </span>
+        @if (alerta(); as a) {
+          @if (a.nivel !== 'ok') { <span class="texto-alerta">{{ a.motivo }}</span> }
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="grid-kpi">
+    <app-tarjeta-kpi titulo="Turno → triage" [valor]="(tiempos().turnoATriage | minutos)" />
+    <app-tarjeta-kpi titulo="Fin triage → médico" [valor]="(tiempos().finTriageAMedico | minutos)" tono="amarillo" />
+    <app-tarjeta-kpi titulo="Turno → médico" [valor]="(tiempos().turnoAMedico | minutos)" />
+    <app-tarjeta-kpi titulo="Estancia total" [valor]="(tiempos().estanciaTotal | minutos)" tono="verde" [detalle]="episodio().egreso ? '' : 'Episodio abierto'" />
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Hitos por etapa</mat-card-title>
+      <mat-card-subtitle>Espera = llegada → entrada · atención = entrada → salida</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="tabla-contenedor">
+      <table class="tabla-simple">
+        <thead>
+          <tr><th>Etapa</th><th>Llegada</th><th>Entrada</th><th>Salida</th><th>Espera</th><th>Atención</th><th>Responsable</th><th>Fuente</th></tr>
+        </thead>
+        <tbody>
+          @for (h of hitos(); track $index) {
+            <tr>
+              <td><strong>{{ h.nombre }}</strong></td>
+              <td>{{ h.llegada | hora: 'fecha-hora' }}</td>
+              <td>{{ h.entrada | hora: 'fecha-hora' }}</td>
+              <td>{{ h.salida | hora: 'fecha-hora' }}</td>
+              <td class="numero">{{ h.espera | minutos }}</td>
+              <td class="numero">{{ h.atencion | minutos }}</td>
+              <td>{{ h.responsable ?? '—' }}</td>
+              <td class="texto-suave">{{ h.sistema }} (ref.)</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Órdenes diagnósticas ({{ ordenes().length }})</mat-card-title>
+      <mat-card-subtitle>Descripciones genéricas, sin resultados clínicos</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="tabla-contenedor">
+      @if (ordenes().length) {
+        <table class="tabla-simple">
+          <thead>
+            <tr><th>Orden</th><th>Tipo</th><th>Solicitud</th><th>Toma / inicio</th><th>Resultado</th><th>Revisión</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            @for (o of ordenes(); track o.id) {
+              <tr>
+                <td>{{ o.id }}<span class="texto-suave bloque">{{ o.descripcion }}</span></td>
+                <td>{{ o.tipo }}<span class="texto-suave bloque">{{ o.sistema }}</span></td>
+                <td>{{ o.solicitud | hora: 'fecha-hora' }}</td>
+                <td>{{ o.estado === 'Solicitada' ? '—' : (o.toma | hora: 'fecha-hora') }}</td>
+                <td>{{ o.estado === 'Disponible' || o.estado === 'Revisada' ? (o.disponible | hora: 'fecha-hora') : '—' }}</td>
+                <td>{{ o.estado === 'Revisada' ? (o.revisado | hora: 'fecha-hora') : '—' }}</td>
+                <td><span class="insignia orden-{{ o.estado === 'Revisada' ? 'ok' : 'pendiente' }}">{{ o.estado }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <p class="texto-suave">Sin órdenes diagnósticas hasta el instante actual.</p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Línea de tiempo de eventos ({{ eventos().length }})</mat-card-title>
+      <mat-card-subtitle>Diccionario mínimo: episodio, fase, evento, fuente, responsable (rol), estado y hora</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <ol class="linea-tiempo">
+        @for (e of eventos(); track e.id) {
+          <li class="hito" [class.evento-manual]="e.origen !== 'Simulación'">
+            <span class="evento-hora">{{ e.ts | hora: 'fecha-hora' }}</span>
+            <div class="pila-xs">
+              <strong>{{ e.tipo }}</strong>
+              <span class="texto-suave">{{ e.fase }} · {{ e.sistema }} · {{ e.rol }} · {{ e.nota }}</span>
+              <span class="texto-suave">{{ e.origen }} · Registrado</span>
+            </div>
+          </li>
+        }
+      </ol>
+    </mat-card-content>
+  </mat-card>
+</div>

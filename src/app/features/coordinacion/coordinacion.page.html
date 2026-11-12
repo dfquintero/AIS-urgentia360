@@ -2,29 +2,51 @@
   <header class="encabezado-pagina">
     <div>
       <h1>Coordinación e indicadores</h1>
-      <p class="texto-suave">Tiempos por etapa, cuellos de botella y configuración de alertas</p>
+      <p class="texto-suave">Periodo simulado transcurrido hasta {{ store.ahora() | hora: 'fecha-hora' }} · indicadores ilustrativos</p>
+    </div>
+    <div class="fila filtros">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Triage</mat-label>
+        <mat-select [value]="filtroTriage()" (valueChange)="filtroTriage.set($event)">
+          <mat-option value="todas">Todos</mat-option>
+          @for (n of niveles; track n) {
+            <mat-option [value]="n">Triage {{ n }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Franja del turno</mat-label>
+        <mat-select [value]="filtroFranja()" (valueChange)="filtroFranja.set($event)">
+          <mat-option value="todas">Todas</mat-option>
+          <mat-option value="Pico simulado">Pico simulado</mat-option>
+          <mat-option value="Valle simulado">Valle simulado</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </header>
 
   <div class="grid-kpi">
-    <app-tarjeta-kpi titulo="Pacientes activos" [valor]="store.activos().length" [detalle]="store.egresados().length + ' egresados en el turno'" />
+    <app-tarjeta-kpi titulo="Episodios activos" [valor]="filas().length" [detalle]="episodios().length + ' episodios en el periodo'" />
     <app-tarjeta-kpi
-      titulo="Pacientes en alerta"
+      titulo="Episodios en alerta"
       [valor]="alertas().rojo + alertas().amarillo"
       [detalle]="alertas().rojo + ' críticos · ' + alertas().amarillo + ' en alerta'"
       [tono]="alertas().rojo ? 'rojo' : alertas().amarillo ? 'amarillo' : 'verde'"
     />
-    <app-tarjeta-kpi titulo="Tiempo promedio por etapa" [valor]="promedioEtapa() + ' min'" detalle="Espera + atención" tono="verde" />
+    <app-tarjeta-kpi titulo="Turno → triage" [valor]="(tiempos().turnoATriage | minutos)" detalle="Promedio (meta por definir)" />
+    <app-tarjeta-kpi titulo="Fin triage → médico" [valor]="(tiempos().finTriageAMedico | minutos)" detalle="Promedio" tono="amarillo" />
     <app-tarjeta-kpi
-      titulo="Cuello de botella"
-      [valor]="cuello()?.etapa ?? '—'"
-      [detalle]="cuello() ? cuello()!.espera + ' min de espera promedio' : ''"
-      tono="rojo"
+      titulo="Triage II > 30 min"
+      [valor]="triageII().fuera + ' / ' + triageII().total"
+      detalle="Referencia Res. 5596 (ilustrativo)"
+      [tono]="triageII().fuera ? 'rojo' : 'verde'"
     />
-    <app-tarjeta-kpi titulo="Permanencia promedio" [valor]="permanenciaEgresados()" detalle="Pacientes egresados" />
+    <app-tarjeta-kpi titulo="Órdenes sin revisar" [valor]="ordenes().pendientes" [detalle]="'Solicitud → resultado: ' + (ordenes().solicitudAResultado | minutos)" />
+    <app-tarjeta-kpi titulo="Cuello de botella" [valor]="cuello()?.etapa ?? '—'" [detalle]="cuello() ? cuello()!.espera + ' min de espera promedio' : ''" tono="rojo" />
+    <app-tarjeta-kpi titulo="Estancia promedio" [valor]="(tiempos().estancia | minutos)" detalle="Turno → egreso" tono="verde" />
   </div>
 
-  <app-flujo-etapas [filas]="store.filas()" />
+  <app-flujo-etapas [filas]="filas()" />
 
   <div class="grid-coordinacion">
     <mat-card appearance="outlined" class="ancho-doble">
@@ -44,18 +66,30 @@
 
     <mat-card appearance="outlined">
       <mat-card-header>
-        <mat-card-title>Distribución por servicio</mat-card-title>
-        <mat-card-subtitle>Pacientes activos</mat-card-subtitle>
+        <mat-card-title>Tipo de demanda</mat-card-title>
+        <mat-card-subtitle>Episodios del periodo (tipología simulada)</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <app-grafico-servicios [datos]="servicios()" />
+        <app-grafico-servicios [datos]="demanda()" />
       </mat-card-content>
     </mat-card>
   </div>
 
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Carga frente a capacidad simulada</mat-card-title>
+      <mat-card-subtitle>Turnos por bloque de 4 horas (barras claras: valle) y dotación hipotética. No representa la dotación de la CUC.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-grafico-capacidad [datos]="capacidad()" />
+    </mat-card-content>
+  </mat-card>
+
   <app-panel-umbrales
     [umbrales]="store.umbrales()"
+    [metas]="store.metasTriage()"
     (cambio)="store.actualizarUmbral($event.etapa, $event.umbral)"
+    (cambioMeta)="store.actualizarMetaTriage($event.nivel, $event.minutos)"
     (restablecer)="store.restablecerUmbrales()"
   />
 </section>

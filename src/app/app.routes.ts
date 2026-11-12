@@ -21,5 +21,15 @@ export const routes: Routes = [
     title: 'Acompañantes · Urgentia 360',
     loadComponent: () => import('./features/acompanantes/acompanantes.page').then((m) => m.AcompanantesPage),
   },
+  {
+    path: 'trazabilidad',
+    title: 'Trazabilidad · Urgentia 360',
+    loadComponent: () => import('./features/trazabilidad/trazabilidad.page').then((m) => m.TrazabilidadPage),
+  },
+  {
+    path: 'trazabilidad/:id',
+    title: 'Trazabilidad · Urgentia 360',
+    loadComponent: () => import('./features/trazabilidad/trazabilidad.page').then((m) => m.TrazabilidadPage),
+  },
   { path: '**', redirectTo: 'operacion' },
 ];

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Paciente, SolicitudEscaneo } from '../../core/models/urgencias.models';
+import { Episodio, SolicitudEscaneo } from '../../core/models/urgencias.models';
 import { UrgenciasStore } from '../../core/services/urgencias.store';
 import { HoraPipe } from '../../shared/pipes/hora.pipe';
 import { FlujoEtapas } from '../../shared/ui/flujo-etapas';
@@ -22,19 +22,19 @@ export class OperacionPage {
   private readonly snackBar = inject(MatSnackBar);
 
   protected readonly codigo = signal('');
-  protected readonly ultimoTurno = signal<Paciente | null>(null);
+  protected readonly ultimoTurno = signal<Episodio | null>(null);
 
   protected generarTurno(): void {
-    const paciente = this.store.generarTurno();
-    this.ultimoTurno.set(paciente);
-    this.codigo.set(paciente.qr);
-    this.snackBar.open(`Turno ${paciente.turno} generado. Siguiente paso: Triage.`, 'OK', { duration: 3000 });
+    const episodio = this.store.generarTurno();
+    this.ultimoTurno.set(episodio);
+    this.codigo.set(episodio.turno);
+    this.snackBar.open(`Turno ${episodio.turno} generado. Siguiente paso obligatorio: Triage.`, 'OK', { duration: 3000 });
   }
 
   protected escanear(solicitud: SolicitudEscaneo): void {
     const resultado = this.store.escanear(solicitud);
     if (resultado.ok) {
-      this.snackBar.open(`${resultado.paciente.turno}: ${resultado.evento.texto}`, 'OK', { duration: 3500 });
+      this.snackBar.open(`${resultado.episodio.turno}: ${resultado.texto}`, 'OK', { duration: 3500 });
       this.codigo.set('');
     } else {
       this.snackBar.open(resultado.error, 'Cerrar', { duration: 6000, panelClass: 'snack-error' });

@@ -1,39 +1,33 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title>Escáner QR</mat-card-title>
-    <mat-card-subtitle>Registra la entrada o salida de la etapa actual</mat-card-subtitle>
+    <mat-card-subtitle>Registro manual de hitos sobre episodios activos</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content class="pila">
     <div class="fila">
       <mat-form-field class="crece" subscriptSizing="dynamic">
-        <mat-label>Código QR o turno</mat-label>
-        <input
-          matInput
-          [(ngModel)]="codigo"
-          [matAutocomplete]="auto"
-          placeholder="QR-U019-ABCD o U-019"
-          autocomplete="off"
-        />
+        <mat-label>Código de turno o episodio</mat-label>
+        <input matInput [(ngModel)]="codigo" [matAutocomplete]="auto" placeholder="TURNO-FICT-00198 o 198" autocomplete="off" />
         <mat-autocomplete #auto="matAutocomplete">
           @for (s of sugerencias(); track s.id) {
-            <mat-option [value]="s.qr">{{ s.turno }} · {{ s.qr }}</mat-option>
+            <mat-option [value]="s.turno">{{ s.turno }} · {{ s.etapa }}</mat-option>
           }
         </mat-autocomplete>
       </mat-form-field>
       <button mat-stroked-button type="button" (click)="escaneoAleatorio()">Escaneo aleatorio</button>
     </div>
 
-    @if (paciente(); as p) {
+    @if (episodio(); as e) {
       <div class="escaneo-detalle">
-        <app-qr-paciente [codigo]="p.qr" [tamano]="96" />
+        <app-qr-paciente [codigo]="e.turno" [tamano]="96" />
         <div class="pila-sm">
           <div class="fila-sm">
-            <strong class="turno">{{ p.turno }}</strong>
-            <app-insignia-triage [nivel]="p.triage" />
+            <strong class="turno">{{ e.turno }}</strong>
+            <app-insignia-triage [nivel]="e.triage" />
           </div>
-          <span>{{ p.nombre }} · {{ p.edad }} años · {{ p.servicio }}</span>
+          <span class="texto-suave">{{ e.id }} · {{ e.grupoEdad }} años · {{ e.demanda }}</span>
           <span class="texto-suave">
-            Etapa: <strong>{{ etapa()?.nombre }}</strong> · {{ etapa()?.area }}
+            Etapa: <strong>{{ etapa()?.nombre }}</strong> · {{ etapa()?.sistema }} (referencial)
           </span>
           <span class="accion accion-{{ accion() }}">
             {{ accion() === 'entrada' ? 'Pendiente: registrar entrada' : 'En atención: registrar salida' }}
@@ -43,7 +37,7 @@
 
       @if (accion() === 'entrada') {
         <mat-form-field subscriptSizing="dynamic">
-          <mat-label>Responsable que recibe</mat-label>
+          <mat-label>Responsable (código ficticio)</mat-label>
           <mat-select [value]="responsable()" (valueChange)="responsable.set($event)">
             @for (r of personal(); track r) {
               <mat-option [value]="r">{{ r }}</mat-option>
@@ -55,20 +49,13 @@
       @if (pideTriage()) {
         <div class="pila-sm">
           <span class="etiqueta">Clasificación asignada por el profesional (obligatoria)</span>
-          <mat-button-toggle-group
-            class="selector-triage"
-            [value]="triage()"
-            (change)="triage.set($event.value)"
-            aria-label="Clasificación de triage"
-          >
-            @for (n of niveles; track n.id) {
-              <mat-button-toggle [value]="n.id" class="triage-opcion-{{ n.id }}">{{ n.id }}</mat-button-toggle>
+          <mat-button-toggle-group class="selector-triage" [value]="triage()" (change)="triage.set($event.value)" aria-label="Clasificación de triage">
+            @for (n of niveles; track n) {
+              <mat-button-toggle [value]="n" class="triage-opcion-{{ n }}">{{ n }}</mat-button-toggle>
             }
           </mat-button-toggle-group>
           @if (!triage()) {
-            <span class="texto-alerta">
-              El triage es obligatorio: no se puede registrar la salida sin clasificación.
-            </span>
+            <span class="texto-alerta">El triage es obligatorio: no se puede registrar la salida sin clasificación.</span>
           }
         </div>
       }
@@ -84,15 +71,24 @@
         </div>
       }
 
+      @if (pideDestino()) {
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Destino de egreso</mat-label>
+          <mat-select [value]="destino()" (valueChange)="destino.set($event)">
+            @for (d of destinos; track d) {
+              <mat-option [value]="d">{{ d }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
       <button mat-flat-button type="button" [disabled]="!puedeRegistrar()" (click)="registrar()">
-        {{ accion() === 'entrada' ? 'Registrar entrada' : 'Registrar salida' }}
+        {{ accion() === 'entrada' ? 'Registrar entrada' : pideDestino() ? 'Registrar egreso' : 'Registrar salida' }}
       </button>
     } @else if (codigo().trim()) {
-      <p class="texto-suave">Código no encontrado entre los pacientes activos.</p>
+      <p class="texto-suave">Código no encontrado entre los episodios activos.</p>
     } @else {
-      <p class="texto-suave">
-        Escanee o escriba un código, use el escaneo aleatorio o seleccione un paciente en el tablero.
-      </p>
+      <p class="texto-suave">Escanee o escriba un código, use el escaneo aleatorio o seleccione un episodio en el tablero.</p>
     }
   </mat-card-content>
 </mat-card>

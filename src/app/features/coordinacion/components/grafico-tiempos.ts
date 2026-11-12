@@ -19,7 +19,7 @@ export class GraficoTiempos {
       textStyle: { fontFamily: 'inherit' },
       tooltip: { trigger: 'axis', valueFormatter: (v: number) => `${v} min` },
       legend: { bottom: 0 },
-      grid: { left: 8, right: 8, top: 16, bottom: 40, containLabel: true },
+      grid: { left: 44, right: 12, top: 24, bottom: 56 },
       xAxis: { type: 'category', data: datos.map((d) => d.etapa), axisLabel: { interval: 0 } },
       yAxis: { type: 'value', name: 'min' },
       series: [
