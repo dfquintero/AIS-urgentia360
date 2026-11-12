@@ -2,7 +2,7 @@
   <header class="encabezado-pagina">
     <div>
       <h1>Operación de urgencias</h1>
-      <p class="texto-suave">Medicina, enfermería y admisiones · registro por escaneo QR</p>
+      <p class="texto-suave">Medicina, enfermería y admisiones · reproducción de la base sintética + registro QR</p>
     </div>
     <button mat-flat-button type="button" (click)="generarTurno()">+ Generar turno (Punto 0)</button>
   </header>
@@ -12,7 +12,7 @@
   <div class="grid-operacion">
     <div class="pila">
       <app-escaner-qr
-        [pacientes]="store.activos()"
+        [episodios]="store.activos()"
         [(codigo)]="codigo"
         (escanear)="escanear($event)"
       />
@@ -23,17 +23,17 @@
             <mat-card-subtitle>Integración conceptual con digiturno</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="turno-generado">
-            <app-qr-paciente [codigo]="t.qr" [tamano]="128" />
+            <app-qr-paciente [codigo]="t.turno" [tamano]="128" />
             <div class="pila-sm">
               <span class="turno-grande">{{ t.turno }}</span>
-              <span>{{ t.servicio }}</span>
-              <span class="texto-suave">Generado a las {{ t.historial[0].llegada | hora }}</span>
+              <span>{{ t.id }} · {{ t.demanda }}</span>
+              <span class="texto-suave">Generado a las {{ t.historial[0].llegada | hora: 'fecha-hora' }}</span>
               <span class="texto-suave">Siguiente etapa obligatoria: Triage</span>
             </div>
           </mat-card-content>
         </mat-card>
       }
-      <app-bitacora [eventos]="store.bitacora()" />
+      <app-bitacora [eventos]="store.eventosRecientes()" />
     </div>
     <app-tablero-pacientes
       [filas]="store.filas()"

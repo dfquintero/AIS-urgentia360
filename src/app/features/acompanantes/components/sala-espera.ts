@@ -7,7 +7,15 @@ export interface TurnoPublico {
   estado: string;
 }
 
-const ORDEN = ['En espera', 'En admisión', 'En valoración', 'En ayudas diagnósticas', 'En proceso de salida'];
+const ORDEN = [
+  'En espera de triage',
+  'En triage',
+  'En admisión',
+  'En espera de valoración',
+  'En valoración',
+  'En ayudas diagnósticas',
+  'En proceso de salida',
+];
 
 @Component({
   selector: 'app-sala-espera',
@@ -17,7 +25,7 @@ const ORDEN = ['En espera', 'En admisión', 'En valoración', 'En ayudas diagnó
     <mat-card appearance="outlined" class="sala">
       <mat-card-header>
         <mat-card-title>Sala de espera · Urgencias</mat-card-title>
-        <mat-card-subtitle>Actualizado {{ actualizado() | hora: false }} · solo códigos de turno, sin datos clínicos</mat-card-subtitle>
+        <mat-card-subtitle>Actualizado {{ actualizado() | hora: 'hora-corta' }} · solo códigos de turno, sin datos clínicos</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="pila">
         @for (g of grupos(); track g.estado) {

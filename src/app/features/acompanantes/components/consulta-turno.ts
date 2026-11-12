@@ -18,7 +18,7 @@ export type ResultadoConsulta =
         <p class="texto-suave">Escriba el código impreso en el tiquete del digiturno.</p>
         <mat-form-field subscriptSizing="dynamic">
           <mat-label>Código de turno</mat-label>
-          <input matInput [(ngModel)]="consulta" placeholder="U-019" autocomplete="off" />
+          <input matInput [(ngModel)]="consulta" placeholder="TURNO-FICT-00198 o 198" autocomplete="off" />
         </mat-form-field>
         @switch (resultado()?.tipo) {
           @case ('activo') {

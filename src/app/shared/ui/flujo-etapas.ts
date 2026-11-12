@@ -6,7 +6,7 @@ import { FilaTablero } from '../../core/models/urgencias.models';
   selector: 'app-flujo-etapas',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ol class="flujo" aria-label="Pacientes por etapa del flujo">
+    <ol class="flujo" aria-label="Episodios activos por etapa del flujo">
       @for (e of resumen(); track e.id) {
         <li class="flujo-etapa" [class.flujo-obligatoria]="e.obligatoria">
           <span class="flujo-nombre">{{ e.corto }}</span>
@@ -25,13 +25,13 @@ export class FlujoEtapas {
   readonly filas = input.required<FilaTablero[]>();
 
   protected readonly resumen = computed(() =>
-    ETAPAS.map((e) => {
+    ETAPAS.filter((e) => e.id !== 'punto0' && e.id !== 'egreso').map((e) => {
       const enEtapa = this.filas().filter((f) => f.etapa.id === e.id);
       return {
         ...e,
         total: enEtapa.length,
-        amarillo: enEtapa.filter((f) => f.alerta === 'amarillo').length,
-        rojo: enEtapa.filter((f) => f.alerta === 'rojo').length,
+        amarillo: enEtapa.filter((f) => f.alerta.nivel === 'amarillo').length,
+        rojo: enEtapa.filter((f) => f.alerta.nivel === 'rojo').length,
       };
     }),
   );

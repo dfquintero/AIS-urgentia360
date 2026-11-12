@@ -7,9 +7,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { ETAPA_POR_ID, ETIQUETA_TRANSICION, NIVELES_TRIAGE, PERSONAL } from '../../../core/data/catalogos';
-import { accionPendiente, etapaActual, opcionesSiguiente, requiereTriage } from '../../../core/domain/flujo';
-import { EtapaId, NivelTriageId, Paciente, SolicitudEscaneo } from '../../../core/models/urgencias.models';
+import { DESTINOS_EGRESO, ETAPA_POR_ID, ETIQUETA_TRANSICION, NIVELES_TRIAGE, PERSONAL } from '../../../core/data/catalogos';
+import {
+  accionPendiente,
+  coincideCodigo,
+  etapaActual,
+  opcionesSiguiente,
+  requiereDestino,
+  requiereTriage,
+} from '../../../core/domain/flujo';
+import { DestinoEgreso, EtapaId, Episodio, NivelTriageId, SolicitudEscaneo } from '../../../core/models/urgencias.models';
 import { InsigniaTriage } from '../../../shared/ui/insignia-triage';
 import { QrPaciente } from '../../../shared/ui/qr-paciente';
 
@@ -31,58 +38,62 @@ import { QrPaciente } from '../../../shared/ui/qr-paciente';
   templateUrl: './escaner-qr.html',
 })
 export class EscanerQr {
-  readonly pacientes = input.required<Paciente[]>();
+  readonly episodios = input.required<Episodio[]>();
   readonly codigo = model('');
   readonly escanear = output<SolicitudEscaneo>();
 
   protected readonly niveles = NIVELES_TRIAGE;
+  protected readonly destinos = DESTINOS_EGRESO;
 
-  protected readonly paciente = computed(() => {
-    const c = this.codigo().trim().toUpperCase();
-    return c ? this.pacientes().find((p) => p.qr === c || p.turno === c) : undefined;
-  });
+  protected readonly episodio = computed(() => this.episodios().find((e) => coincideCodigo(e, this.codigo())));
   protected readonly etapa = computed(() => {
-    const p = this.paciente();
-    return p ? ETAPA_POR_ID[etapaActual(p)] : null;
+    const e = this.episodio();
+    return e ? ETAPA_POR_ID[etapaActual(e)] : null;
   });
   protected readonly accion = computed(() => {
-    const p = this.paciente();
-    return p ? accionPendiente(p) : null;
+    const e = this.episodio();
+    return e ? accionPendiente(e) : null;
   });
   protected readonly personal = computed(() => {
     const e = this.etapa();
     return e ? PERSONAL[e.rol] : [];
   });
   protected readonly opciones = computed(() => {
-    const p = this.paciente();
-    return p && this.accion() === 'salida' ? opcionesSiguiente(p) : [];
+    const e = this.episodio();
+    return e ? opcionesSiguiente(e) : [];
   });
   protected readonly pideTriage = computed(() => {
-    const p = this.paciente();
-    return p ? requiereTriage(p) : false;
+    const e = this.episodio();
+    return e ? requiereTriage(e) : false;
+  });
+  protected readonly pideDestino = computed(() => {
+    const e = this.episodio();
+    return e ? requiereDestino(e) : false;
   });
   protected readonly sugerencias = computed(() => {
     const c = this.codigo().trim().toUpperCase();
-    return this.pacientes()
-      .filter((p) => !c || p.qr.includes(c) || p.turno.includes(c))
-      .slice(0, 8);
+    return this.episodios()
+      .filter((e) => !c || e.turno.includes(c) || e.id.includes(c))
+      .slice(0, 8)
+      .map((e) => ({ id: e.id, turno: e.turno, etapa: ETAPA_POR_ID[etapaActual(e)].corto }));
   });
 
-  private readonly claveEscaneo = computed(() => `${this.paciente()?.id}|${this.accion()}`);
-  protected readonly responsable = linkedSignal<string, string | null>({
-    source: this.claveEscaneo,
-    computation: () => null,
+  // Las selecciones pertenecen al escaneo en curso: se reinician al cambiar de episodio o de acción.
+  private readonly claveEscaneo = computed(() => `${this.episodio()?.id}|${this.etapa()?.id}|${this.accion()}`);
+  protected readonly responsable = linkedSignal<string, string | null>({ source: this.claveEscaneo, computation: () => null });
+  protected readonly triage = linkedSignal<string, NivelTriageId | null>({ source: this.claveEscaneo, computation: () => null });
+  protected readonly destino = linkedSignal<string, DestinoEgreso | null>({ source: this.claveEscaneo, computation: () => null });
+  protected readonly siguiente = linkedSignal<string, EtapaId | null>({
+    source: computed(() => `${this.claveEscaneo()}|${this.opciones().join(',')}`),
+    computation: () => this.opciones()[0] ?? null,
   });
-  protected readonly triage = linkedSignal<string, NivelTriageId | null>({
-    source: this.claveEscaneo,
-    computation: () => null,
-  });
-  protected readonly siguiente = linkedSignal<EtapaId | null>(() => this.opciones()[0] ?? null);
 
   protected readonly puedeRegistrar = computed(() => {
-    if (!this.paciente()) return false;
+    if (!this.episodio()) return false;
     if (this.accion() === 'entrada') return !!this.responsable();
-    return !this.pideTriage() || !!this.triage();
+    if (this.pideTriage()) return !!this.triage();
+    if (this.pideDestino()) return !!this.destino();
+    return true;
   });
 
   protected etiquetaDestino(destino: EtapaId): string {
@@ -90,8 +101,8 @@ export class EscanerQr {
   }
 
   protected escaneoAleatorio(): void {
-    const lista = this.pacientes();
-    if (lista.length) this.codigo.set(lista[Math.floor(Math.random() * lista.length)].qr);
+    const lista = this.episodios();
+    if (lista.length) this.codigo.set(lista[Math.floor(Math.random() * lista.length)].turno);
   }
 
   protected registrar(): void {
@@ -99,6 +110,7 @@ export class EscanerQr {
       codigo: this.codigo(),
       responsable: this.responsable(),
       triage: this.triage(),
+      destino: this.destino(),
       siguiente: this.siguiente() ?? undefined,
     });
   }

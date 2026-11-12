@@ -1,46 +1,56 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title>Umbrales de alerta por etapa</mat-card-title>
-    <mat-card-subtitle>Minutos en la etapa. Los cambios se reflejan de inmediato en el tablero de operación.</mat-card-subtitle>
+    <mat-card-title>Umbrales de alerta</mat-card-title>
+    <mat-card-subtitle>
+      <strong>Ilustrativos hasta validación institucional.</strong> Los cambios se reflejan de inmediato en el tablero de operación.
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content class="pila">
-    @for (e of etapas; track e.id) {
-      <div class="umbral">
-        <span class="umbral-nombre">{{ e.corto }}</span>
-        <mat-slider class="umbral-slider" [min]="1" [max]="e.maximo" [step]="1" discrete>
-          <input
-            matSliderStartThumb
-            [value]="umbrales()[e.id].amarillo"
-            (valueChange)="actualizar(e.id, 'amarillo', $event)"
-            [attr.aria-label]="'Umbral amarillo ' + e.corto"
-          />
-          <input
-            matSliderEndThumb
-            [value]="umbrales()[e.id].rojo"
-            (valueChange)="actualizar(e.id, 'rojo', $event)"
-            [attr.aria-label]="'Umbral rojo ' + e.corto"
-          />
-        </mat-slider>
-        <label class="umbral-valor alerta-amarillo">
-          <input
-            type="number"
-            min="1"
-            [value]="umbrales()[e.id].amarillo"
-            (change)="actualizar(e.id, 'amarillo', $any($event.target).value)"
-            [attr.aria-label]="'Minutos amarillo ' + e.corto"
-          />
-        </label>
-        <label class="umbral-valor alerta-rojo">
-          <input
-            type="number"
-            min="2"
-            [value]="umbrales()[e.id].rojo"
-            (change)="actualizar(e.id, 'rojo', $any($event.target).value)"
-            [attr.aria-label]="'Minutos rojo ' + e.corto"
-          />
-        </label>
+    <section class="pila-sm">
+      <h3 class="subtitulo">Metas por categoría de triage · fin de triage → valoración médica</h3>
+      <div class="metas">
+        @for (n of niveles; track n) {
+          <div class="meta">
+            <span class="insignia triage-{{ n }}">T-{{ n }}</span>
+            @if (normativas[n] != null) {
+              <strong>{{ normativas[n] === 0 ? 'Inmediata' : normativas[n] + ' min' }}</strong>
+              <span class="texto-suave">Res. 5596/2015</span>
+            } @else {
+              <label class="meta-entrada">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Por definir"
+                  [value]="metas()[n] ?? ''"
+                  (change)="actualizarMeta(n, $any($event.target).value)"
+                  [attr.aria-label]="'Meta triage ' + n + ' en minutos'"
+                />
+                <span class="texto-suave">min · institucional, por definir</span>
+              </label>
+            }
+          </div>
+        }
       </div>
-    }
+    </section>
+
+    <section class="pila-sm">
+      <h3 class="subtitulo">Minutos en la etapa (espera + atención)</h3>
+      @for (e of etapas; track e.id) {
+        <div class="umbral">
+          <span class="umbral-nombre">{{ e.corto }}</span>
+          <mat-slider class="umbral-slider" [min]="1" [max]="e.maximo" [step]="1" discrete>
+            <input matSliderStartThumb [value]="umbrales()[e.id].amarillo" (valueChange)="actualizar(e.id, 'amarillo', $event)" [attr.aria-label]="'Umbral amarillo ' + e.corto" />
+            <input matSliderEndThumb [value]="umbrales()[e.id].rojo" (valueChange)="actualizar(e.id, 'rojo', $event)" [attr.aria-label]="'Umbral rojo ' + e.corto" />
+          </mat-slider>
+          <label class="umbral-valor alerta-amarillo">
+            <input type="number" min="1" [value]="umbrales()[e.id].amarillo" (change)="actualizar(e.id, 'amarillo', $any($event.target).value)" [attr.aria-label]="'Minutos amarillo ' + e.corto" />
+          </label>
+          <label class="umbral-valor alerta-rojo">
+            <input type="number" min="2" [value]="umbrales()[e.id].rojo" (change)="actualizar(e.id, 'rojo', $any($event.target).value)" [attr.aria-label]="'Minutos rojo ' + e.corto" />
+          </label>
+        </div>
+      }
+    </section>
     <div>
       <button mat-stroked-button type="button" (click)="restablecer.emit()">Restablecer valores</button>
     </div>

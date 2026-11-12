@@ -1,52 +1,96 @@
-import { ETAPA_POR_ID, TRANSICIONES } from '../data/catalogos';
-import { nuevoRegistro } from '../data/datos-simulados';
+import { ETAPA_POR_ID, PERSONAL, TRANSICIONES } from '../data/catalogos';
 import {
   AccionEscaneo,
+  DestinoEgreso,
+  Episodio,
   EtapaId,
   NivelTriageId,
-  Paciente,
   RegistroEtapa,
   ResultadoEscaneo,
 } from '../models/urgencias.models';
 
-export const registroActual = (p: Paciente): RegistroEtapa => p.historial[p.historial.length - 1];
+export const registroActual = (e: Episodio): RegistroEtapa => e.historial[e.historial.length - 1];
 
-export const etapaActual = (p: Paciente): EtapaId => registroActual(p).etapa;
+export const etapaActual = (e: Episodio): EtapaId => registroActual(e).etapa;
 
-/** 'entrada' si el paciente espera ser atendido en su etapa actual; 'salida' si ya está en atención. */
-export const accionPendiente = (p: Paciente): AccionEscaneo =>
-  registroActual(p).entrada ? 'salida' : 'entrada';
+/** 'entrada' si el episodio espera ser atendido en su etapa actual; 'salida' si ya está en atención. */
+export const accionPendiente = (e: Episodio): AccionEscaneo =>
+  registroActual(e).entrada != null ? 'salida' : 'entrada';
 
-export const opcionesSiguiente = (p: Paciente): readonly EtapaId[] => TRANSICIONES[etapaActual(p)];
+export const opcionesSiguiente = (e: Episodio): readonly EtapaId[] =>
+  accionPendiente(e) === 'salida' ? TRANSICIONES[etapaActual(e)] : [];
 
-export const requiereTriage = (p: Paciente): boolean =>
-  etapaActual(p) === 'triage' && accionPendiente(p) === 'salida' && !p.triage;
+export const requiereTriage = (e: Episodio): boolean =>
+  etapaActual(e) === 'triage' && accionPendiente(e) === 'salida' && !e.triage;
+
+export const requiereDestino = (e: Episodio): boolean =>
+  etapaActual(e) === 'conducta' && accionPendiente(e) === 'salida';
+
+export const nuevoRegistro = (etapa: EtapaId, llegada: number, extra: Partial<RegistroEtapa> = {}): RegistroEtapa => ({
+  etapa,
+  llegada,
+  entrada: null,
+  salida: null,
+  responsable: null,
+  ...extra,
+});
+
+export const numeroEpisodio = (id: string): number => Number(id.replace(/\D/g, '')) || 0;
+
+/** Busca por ID de episodio, ID de turno o solo por su número ("198"). */
+export function coincideCodigo(e: Episodio, codigo: string): boolean {
+  const c = codigo.trim().toUpperCase();
+  if (!c) return false;
+  if (e.id === c || e.turno === c) return true;
+  return /^\d{1,5}$/.test(c) && numeroEpisodio(e.id) === Number(c);
+}
+
+/** Turno nuevo generado en Punto 0: queda en espera de triage (obligatorio). */
+export function crearEpisodioNuevo(numero: number, ahora: number, demanda: string, grupoEdad: string): Episodio {
+  const sufijo = String(numero).padStart(5, '0');
+  return {
+    id: `DEM-URG-${sufijo}`,
+    turno: `TURNO-FICT-${sufijo}`,
+    triage: null,
+    grupoEdad,
+    demanda,
+    responsable: PERSONAL.medico[numero % PERSONAL.medico.length],
+    historial: [
+      nuevoRegistro('punto0', ahora, { entrada: ahora, salida: ahora, responsable: PERSONAL.digiturno[0] }),
+      nuevoRegistro('triage', ahora),
+    ],
+  };
+}
 
 export interface DatosEscaneo {
   ahora: number;
   responsable?: string | null;
   siguiente?: EtapaId;
   triage?: NivelTriageId | null;
+  destino?: DestinoEgreso | null;
 }
 
-/** Aplica un escaneo QR al paciente siguiendo la máquina de estados del flujo de urgencias. */
-export function registrarEscaneo(paciente: Paciente, datos: DatosEscaneo): ResultadoEscaneo {
-  const { ahora, responsable, siguiente, triage } = datos;
-  const actual = registroActual(paciente);
-  const etapa = ETAPA_POR_ID[actual.etapa];
-  const previos = paciente.historial.slice(0, -1);
+/** Aplica un escaneo QR al episodio siguiendo la máquina de estados del flujo de urgencias. */
+export function registrarEscaneo(episodio: Episodio, datos: DatosEscaneo): ResultadoEscaneo {
+  const { ahora, responsable, siguiente, triage, destino } = datos;
+  if (episodio.egreso != null) return { ok: false, error: 'El episodio ya egresó.' };
 
-  if (!actual.entrada) {
+  const actual = registroActual(episodio);
+  const etapa = ETAPA_POR_ID[actual.etapa];
+  const previos = episodio.historial.slice(0, -1);
+
+  if (actual.entrada == null) {
     if (!responsable) return { ok: false, error: 'Seleccione el responsable que recibe al paciente.' };
     return {
       ok: true,
-      paciente: { ...paciente, historial: [...previos, { ...actual, entrada: ahora, responsable }] },
+      episodio: { ...episodio, historial: [...previos, { ...actual, entrada: ahora, responsable }] },
       egresado: false,
-      evento: { tipo: 'entrada', texto: `Entrada a ${etapa.nombre} · ${responsable}` },
+      etapaEvento: actual.etapa,
+      texto: `Entrada a ${etapa.nombre} · ${responsable}`,
     };
   }
 
-  const clasificacion = paciente.triage ?? triage ?? null;
+  const clasificacion = episodio.triage ?? triage ?? null;
   if (actual.etapa === 'triage' && !clasificacion) {
     return {
       ok: false,
@@ -55,38 +99,35 @@ export function registrarEscaneo(paciente: Paciente, datos: DatosEscaneo): Resul
   }
 
   const cerrado: RegistroEtapa = { ...actual, salida: ahora };
+  const permitidas = TRANSICIONES[actual.etapa];
+  const destinoEtapa = siguiente ?? permitidas[0];
+  if (!destinoEtapa || !permitidas.includes(destinoEtapa)) {
+    const nombre = destinoEtapa ? (ETAPA_POR_ID[destinoEtapa]?.nombre ?? destinoEtapa) : '—';
+    return { ok: false, error: `Transición no permitida: ${etapa.nombre} → ${nombre}.` };
+  }
 
-  if (actual.etapa === 'egreso') {
+  if (destinoEtapa === 'egreso') {
+    if (!destino) return { ok: false, error: 'Seleccione el destino de egreso.' };
+    const egreso = nuevoRegistro('egreso', ahora, { entrada: ahora, salida: ahora, responsable: actual.responsable });
     return {
       ok: true,
-      paciente: { ...paciente, historial: [...previos, cerrado], egreso: ahora },
+      episodio: { ...episodio, historial: [...previos, cerrado, egreso], egreso: ahora, destino },
       egresado: true,
-      evento: { tipo: 'egreso', texto: 'Salida de urgencias · atención finalizada' },
+      etapaEvento: 'egreso',
+      texto: `Egreso registrado · destino: ${destino}`,
     };
   }
 
-  const permitidas = TRANSICIONES[actual.etapa];
-  const destino = siguiente ?? permitidas[0];
-  if (!permitidas.includes(destino)) {
-    const nombreDestino = ETAPA_POR_ID[destino]?.nombre ?? destino;
-    return { ok: false, error: `Transición no permitida: ${etapa.nombre} → ${nombreDestino}.` };
-  }
-
-  const esRevaloracion = actual.etapa === 'valoracion' && destino === 'valoracion';
-  const nuevo = nuevoRegistro(destino, ahora, {
-    revaloracion: esRevaloracion ? actual.revaloracion + 1 : 0,
-  });
   const detalleTriage = actual.etapa === 'triage' ? ` (Triage ${clasificacion})` : '';
-
   return {
     ok: true,
-    paciente: { ...paciente, triage: clasificacion, historial: [...previos, cerrado, nuevo] },
-    egresado: false,
-    evento: {
-      tipo: 'salida',
-      texto: esRevaloracion
-        ? `Salida de ${etapa.nombre} → revaloración #${nuevo.revaloracion}`
-        : `Salida de ${etapa.nombre} → ${ETAPA_POR_ID[destino].nombre}${detalleTriage}`,
+    episodio: {
+      ...episodio,
+      triage: clasificacion,
+      historial: [...previos, cerrado, nuevoRegistro(destinoEtapa, ahora)],
     },
+    egresado: false,
+    etapaEvento: actual.etapa,
+    texto: `Salida de ${etapa.nombre} → ${ETAPA_POR_ID[destinoEtapa].nombre}${detalleTriage}`,
   };
 }

@@ -1,0 +1,65 @@
+<section class="pagina pila">
+  <header class="encabezado-pagina">
+    <div>
+      <h1>Trazabilidad del episodio</h1>
+      <p class="texto-suave">Recorrido de extremo a extremo: turno, triage, admisión, valoración, órdenes, revaloración, conducta y egreso</p>
+    </div>
+  </header>
+
+  <div class="grid-trazabilidad">
+    <div class="pila">
+      <mat-card appearance="outlined">
+        <mat-card-content class="pila-sm">
+          <form class="fila" (submit)="$event.preventDefault(); buscar()">
+            <mat-form-field class="crece" subscriptSizing="dynamic">
+              <mat-label>Episodio o turno</mat-label>
+              <input matInput name="busqueda" [(ngModel)]="busqueda" placeholder="DEM-URG-00198 o 198" autocomplete="off" />
+            </mat-form-field>
+            <button mat-flat-button type="submit">Buscar</button>
+          </form>
+          @if (busqueda().trim() && !store.buscar(busqueda())) {
+            <span class="texto-suave">No hay un episodio con ese código hasta el instante actual.</span>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Casos de demostración</mat-card-title>
+          <mat-card-subtitle>Sugeridos en la base sintética UNAL–Kantera</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="pila">
+          @for (c of casos(); track c.titulo) {
+            <section class="pila-sm">
+              <strong>{{ c.titulo }}</strong>
+              <span class="texto-suave">{{ c.descripcion }}</span>
+              <div class="chips">
+                @for (e of c.episodios; track e.id) {
+                  <a class="chip" [class.chip-activo]="e.id === episodio()?.id" [routerLink]="['/trazabilidad', e.id]">{{ e.id }}</a>
+                } @empty {
+                  <span class="texto-suave">Sin casos en el instante actual.</span>
+                }
+              </div>
+            </section>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    @if (episodio(); as e) {
+      <app-detalle-episodio [episodio]="e" [eventos]="eventos()" [ordenes]="ordenes()" [alerta]="alerta()" [ahora]="store.ahora()" />
+    } @else {
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <p class="texto-suave">
+            @if (id()) {
+              El episodio {{ id() }} no existe o aún no ha generado turno en el instante actual de la reproducción.
+            } @else {
+              Busque un episodio o elija uno de los casos de demostración.
+            }
+          </p>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</section>

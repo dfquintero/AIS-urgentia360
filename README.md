@@ -1,10 +1,14 @@
 # Urgentia 360 · Seguimiento operativo de urgencias
 
-Prototipo académico (solo frontend) para el seguimiento operativo de un servicio de urgencias. Usa
-datos simulados en memoria, no tiene backend y la "red interna cifrada" es solo una etiqueta visual.
+Prototipo académico (solo frontend) para el seguimiento operativo de un servicio de urgencias, construido a partir
+de la **base de datos sintética URGENTIA 360° (UNAL–Kantera 2026)**: 360 episodios ficticios, 4.240 eventos,
+495 órdenes diagnósticas y 84 bloques de capacidad. No tiene backend; el "tiempo real" es una **reproducción** de
+esos eventos ficticios y la "red interna cifrada" es solo una etiqueta visual.
 
-> El sistema **no toma decisiones clínicas**. El triage es obligatorio y siempre lo realiza el
-> profesional de salud; la aplicación solo registra la clasificación.
+> El sistema **no toma decisiones clínicas** ni debe usarse para negar o retrasar la atención (Resolución 5596 de
+> 2015). El triage es obligatorio y siempre lo realiza el profesional de salud; la aplicación solo registra la
+> clasificación. Los datos no representan a la Clínica Universitaria Colombia ni a Keralty y los umbrales son
+> ilustrativos hasta validación institucional.
 
 ---
 
@@ -47,6 +51,19 @@ npm install
 
 `npm install` descarga las dependencias en `node_modules/` (solo se hace una vez, tarda 1–2 minutos).
 
+### 2.1 Base de datos sintética
+
+El repositorio incluye `public/datos/urgentia360.json`, derivado del Excel *URGENTIA 360° – Base de Datos Sintética
+UNAL–Kantera 2026* con aprobación para el proyecto académico. Si se recibe una versión nueva del Excel, se regenera así:
+
+```bash
+pip install openpyxl
+python scripts/convertir_dataset.py "ruta/URGENTIA 360º - Base de Datos Sintetica. UNAL_Kantera 2026.xlsx"
+```
+
+Si el JSON no estuviera disponible, la aplicación genera **datos de respaldo** con la misma estructura y lo indica
+en el encabezado ("Datos de respaldo").
+
 ### 3. Opción A — modo desarrollo (recomendada para revisar)
 
 ```bash
@@ -86,26 +103,40 @@ hosting estático (GitHub Pages, Netlify, un servidor web interno). Las rutas us
 
 ## Recorrido sugerido para una demostración
 
-Al abrir la aplicación ya hay 18 pacientes activos en distintas etapas y 12 egresados.
+La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes del corte de la simulación) a 10×.
 
-1. **Acelerar el reloj:** en el encabezado, elegir `30×` para ver avanzar los tiempos y las alertas.
+1. **Rol simulado** (botón "Rol: …" del encabezado, sin login real): cada perfil ve solo sus vistas, según la
+   matriz sugerida por Kantera (no es un esquema de permisos aprobado):
+
+   | Rol | Vistas |
+   |---|---|
+   | Demostración | Todas |
+   | Médico / Enfermería | Operación, Trazabilidad |
+   | Coordinación de urgencias | Operación, Coordinación (con umbrales), Trazabilidad |
+   | Directivo / Analista | Coordinación (solo indicadores agregados) |
+   | Acompañante | Acompañantes |
+1. **Controles del encabezado:** pausa, velocidad (1× a 300×) y **Ir a…** para saltar al inicio del periodo, a un
+   pico de demanda o al corte (15 oct, 00:00), donde quedan los 10 episodios abiertos de la base.
 2. **Operación** (`#/operacion`):
-   1. Pulsar **+ Generar turno (Punto 0)**. Se crea un turno nuevo con su QR y queda cargado en el escáner.
-   2. Pulsar **Registrar salida**: el paciente pasa a Triage (la única salida posible de Punto 0).
-   3. Elegir un responsable y pulsar **Registrar entrada** a Triage.
-   4. Intentar salir de Triage: el botón está deshabilitado hasta escoger la clasificación (I–V)
-      que asigna el profesional. Elegirla y registrar la salida → pasa a Admisión.
-   5. Hacer clic en un paciente del tablero que esté en **Consulta** y registrar su salida: se puede
-      escoger **Ayudas diagnósticas** o pasar directo a **Valoración**.
-   6. Con un paciente en **Valoración**, elegir **Revaloración** o **Egreso**.
-   7. Los QR del escáner son reales: pueden leerse con la cámara del celular.
-3. **Coordinación** (`#/coordinacion`): revisar los indicadores, el cuello de botella resaltado en rojo
-   y la distribución por servicio. Mover los umbrales de una etapa y volver a Operación: las alertas
-   amarillas y rojas del tablero cambian de inmediato.
-4. **Acompañantes** (`#/acompanantes`): la sala de espera solo muestra códigos de turno y un estado
-   genérico. En la vista móvil, escribir un código (por ejemplo `U-019` o simplemente `19`).
+   1. El tablero muestra los episodios activos con su etapa, tiempo, órdenes pendientes y el motivo de la alerta
+      (umbral ilustrativo de la etapa o meta normativa de Triage I/II).
+   2. Pulsar **+ Generar turno (Punto 0)**: se crea un episodio nuevo en espera de triage, con su QR.
+   3. Elegir un responsable (código ficticio) y **Registrar entrada** a Triage. Para salir, el botón exige la
+      clasificación (I–V) que asigna el profesional.
+   4. Seleccionar un episodio del tablero y registrar sus hitos: desde la primera valoración se elige
+      **ayudas diagnósticas** o **definir conducta**; el egreso exige el destino (alta, hospitalización, remisión, otro).
+   5. La bitácora mezcla los eventos reproducidos de la base con los registros manuales (marcados "QR manual").
+3. **Coordinación** (`#/coordinacion`): filtrar por triage y franja; revisar turno→triage, fin de triage→médico,
+   Triage II > 30 min (ilustrativo), órdenes sin revisar, cuello de botella y carga frente a capacidad simulada.
+   Las metas de Triage III–V quedan **por definir** y pueden configurarse.
+4. **Trazabilidad** (`#/trazabilidad`): los tres casos de demostración de la base (demora post-triage, órdenes sin
+   resultado y episodio abierto). Cada episodio muestra hitos, órdenes y la línea de tiempo con fuente
+   (Sofía/Digiturno, HIS/Athenea, LIS, PACS/RIS, todas referenciales), rol y origen del registro.
+5. **Acompañantes** (`#/acompanantes`): solo código de turno y estado genérico. En la vista móvil se puede escribir
+   el código completo (`TURNO-FICT-00085`) o solo el número (`85`).
 
-Los datos viven en memoria: **al recargar la página todo vuelve al estado inicial**.
+Los registros manuales viven en memoria: **al recargar la página se pierden** (también desde **Ir a… → Descartar
+registros manuales**).
 
 ---
 
@@ -138,17 +169,19 @@ npm run build               # verifica que la aplicación compile
 
 ## Flujo de atención (máquina de estados)
 
-`Punto 0 (turno) → Triage (obligatorio) → Admisión → Consulta → [Ayudas diagnósticas] → Valoración/Observación (revaloración opcional) → Egreso`
+`Punto 0 (turno) → Triage (obligatorio) → Admisión → Primera valoración → [Ayudas diagnósticas ⇄ Revaloración] → Definición de conducta → Egreso`
 
 Cada escaneo QR alterna entre **entrada** (requiere responsable) y **salida** de la etapa actual. No se
-puede salir de Triage sin clasificación (I–V).
+puede salir de Triage sin clasificación (I–V) ni egresar sin destino. Un episodio registrado manualmente deja
+de seguir la reproducción desde ese instante.
 
 ## Vistas
 
 | Ruta | Usuarios | Contenido |
 |---|---|---|
 | `#/operacion` | Medicina, enfermería, admisiones | Generar turno, escáner QR, tablero con alertas, bitácora |
-| `#/coordinacion` | Coordinación | KPIs, tiempos por etapa, cuello de botella, servicios, umbrales |
+| `#/coordinacion` | Coordinación, analistas | KPIs, tiempos por etapa, cuello de botella, demanda, capacidad, umbrales y metas |
+| `#/trazabilidad` | Coordinación, analistas | Episodio de extremo a extremo y casos de demostración |
 | `#/acompanantes` | Acompañantes | Sala de espera y consulta móvil por código de turno, sin datos clínicos |
 
 ## Estructura
@@ -157,9 +190,10 @@ Organización por funcionalidades con componentes contenedores (páginas) y de p
 
 ```
 src/app/
-  core/       modelos, catálogos, datos simulados, dominio (flujo, indicadores), servicios (reloj, store)
+  core/       modelos, catálogos, carga de la base sintética, dominio (flujo, indicadores), servicios (reloj, store)
   shared/     componentes de presentación y pipes reutilizables
-  features/   operacion/, coordinacion/, acompanantes/ (página + components/)
+  features/   operacion/, coordinacion/, trazabilidad/, acompanantes/ (página + components/)
+scripts/      convertir_dataset.py: Excel UNAL–Kantera → public/datos/urgentia360.json
 src/theme/    paleta de Angular Material generada desde los colores Keralty
 ```
 
