@@ -187,7 +187,8 @@ mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
 
 // Acompañantes
 .sala .mat-mdc-card-title { font-size: 1.3rem; }
-.sala-estado { font-size: 1rem; margin-bottom: 8px; }
+.sala-estado { font-size: 1rem; margin: 4px 0 8px; }
+.sala .mat-mdc-card-content { padding-top: 8px; }
 .sala-turnos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; list-style: none; margin: 0; padding: 0; }
 .sala-turno {
   padding: 10px; text-align: center; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.04em;
