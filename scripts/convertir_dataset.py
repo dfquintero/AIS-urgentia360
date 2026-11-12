@@ -4,7 +4,7 @@ Uso:
     pip install openpyxl
     python scripts/convertir_dataset.py "ruta/al/archivo.xlsx"
 
-Genera public/datos/urgentia360.json (excluido de git: el Excel no debe publicarse sin aprobación).
+Genera public/datos/urgentia360.json, que se versiona en el repositorio (publicación aprobada para el proyecto académico).
 Los tiempos se expresan en minutos desde el inicio del periodo simulado (hora de Bogotá).
 """
 

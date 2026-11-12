@@ -51,18 +51,18 @@ npm install
 
 `npm install` descarga las dependencias en `node_modules/` (solo se hace una vez, tarda 1–2 minutos).
 
-### 2.1 Cargar la base de datos sintética (opcional, recomendado)
+### 2.1 Base de datos sintética
 
-El Excel de Kantera **no se publica en el repositorio** (su hoja LEEME prohíbe cargarlo a plataformas externas sin
-aprobación). Quien tenga el archivo lo convierte localmente al JSON que usa la aplicación:
+El repositorio incluye `public/datos/urgentia360.json`, derivado del Excel *URGENTIA 360° – Base de Datos Sintética
+UNAL–Kantera 2026* con aprobación para el proyecto académico. Si se recibe una versión nueva del Excel, se regenera así:
 
 ```bash
 pip install openpyxl
 python scripts/convertir_dataset.py "ruta/URGENTIA 360º - Base de Datos Sintetica. UNAL_Kantera 2026.xlsx"
 ```
 
-Esto crea `public/datos/urgentia360.json` (excluido de git). Si el archivo no existe, la aplicación genera
-**datos de respaldo** con la misma estructura y lo indica en el encabezado ("Datos de respaldo").
+Si el JSON no estuviera disponible, la aplicación genera **datos de respaldo** con la misma estructura y lo indica
+en el encabezado ("Datos de respaldo").
 
 ### 3. Opción A — modo desarrollo (recomendada para revisar)
 
