@@ -1,0 +1,48 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Umbrales de alerta por etapa</mat-card-title>
+    <mat-card-subtitle>Minutos en la etapa. Los cambios se reflejan de inmediato en el tablero de operación.</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="pila">
+    @for (e of etapas; track e.id) {
+      <div class="umbral">
+        <span class="umbral-nombre">{{ e.corto }}</span>
+        <mat-slider class="umbral-slider" [min]="1" [max]="e.maximo" [step]="1" discrete>
+          <input
+            matSliderStartThumb
+            [value]="umbrales()[e.id].amarillo"
+            (valueChange)="actualizar(e.id, 'amarillo', $event)"
+            [attr.aria-label]="'Umbral amarillo ' + e.corto"
+          />
+          <input
+            matSliderEndThumb
+            [value]="umbrales()[e.id].rojo"
+            (valueChange)="actualizar(e.id, 'rojo', $event)"
+            [attr.aria-label]="'Umbral rojo ' + e.corto"
+          />
+        </mat-slider>
+        <label class="umbral-valor alerta-amarillo">
+          <input
+            type="number"
+            min="1"
+            [value]="umbrales()[e.id].amarillo"
+            (change)="actualizar(e.id, 'amarillo', $any($event.target).value)"
+            [attr.aria-label]="'Minutos amarillo ' + e.corto"
+          />
+        </label>
+        <label class="umbral-valor alerta-rojo">
+          <input
+            type="number"
+            min="2"
+            [value]="umbrales()[e.id].rojo"
+            (change)="actualizar(e.id, 'rojo', $any($event.target).value)"
+            [attr.aria-label]="'Minutos rojo ' + e.corto"
+          />
+        </label>
+      </div>
+    }
+    <div>
+      <button mat-stroked-button type="button" (click)="restablecer.emit()">Restablecer valores</button>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,44 @@
+<section class="pagina pila">
+  <header class="encabezado-pagina">
+    <div>
+      <h1>Operación de urgencias</h1>
+      <p class="texto-suave">Medicina, enfermería y admisiones · registro por escaneo QR</p>
+    </div>
+    <button mat-flat-button type="button" (click)="generarTurno()">+ Generar turno (Punto 0)</button>
+  </header>
+
+  <app-flujo-etapas [filas]="store.filas()" />
+
+  <div class="grid-operacion">
+    <div class="pila">
+      <app-escaner-qr
+        [pacientes]="store.activos()"
+        [(codigo)]="codigo"
+        (escanear)="escanear($event)"
+      />
+      @if (ultimoTurno(); as t) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>Último turno generado</mat-card-title>
+            <mat-card-subtitle>Integración conceptual con digiturno</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="turno-generado">
+            <app-qr-paciente [codigo]="t.qr" [tamano]="128" />
+            <div class="pila-sm">
+              <span class="turno-grande">{{ t.turno }}</span>
+              <span>{{ t.servicio }}</span>
+              <span class="texto-suave">Generado a las {{ t.historial[0].llegada | hora }}</span>
+              <span class="texto-suave">Siguiente etapa obligatoria: Triage</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+      <app-bitacora [eventos]="store.bitacora()" />
+    </div>
+    <app-tablero-pacientes
+      [filas]="store.filas()"
+      [seleccionado]="codigo()"
+      (seleccionar)="codigo.set($event)"
+    />
+  </div>
+</section>
