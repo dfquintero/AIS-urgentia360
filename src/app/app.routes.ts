@@ -11,10 +11,19 @@ const accesoPorRol: CanMatchFn = (route) => {
 
 const vistaInicial = () => `/${inject(RolService).vistaInicial()}`;
 
+const graficos = provideEchartsCore({ echarts: () => import('./core/graficos/echarts-config').then((m) => m.echarts) });
+
 const trazabilidad = () => import('./features/trazabilidad/trazabilidad.page').then((m) => m.TrazabilidadPage);
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: vistaInicial },
+  {
+    path: 'cuellos',
+    title: 'Cuellos de botella · Urgentia 360',
+    canMatch: [accesoPorRol],
+    providers: [graficos],
+    loadComponent: () => import('./features/cuellos/cuellos.page').then((m) => m.CuellosPage),
+  },
   {
     path: 'operacion',
     title: 'Operación · Urgentia 360',
@@ -25,7 +34,7 @@ export const routes: Routes = [
     path: 'coordinacion',
     title: 'Coordinación · Urgentia 360',
     canMatch: [accesoPorRol],
-    providers: [provideEchartsCore({ echarts: () => import('./core/graficos/echarts-config').then((m) => m.echarts) })],
+    providers: [graficos],
     loadComponent: () => import('./features/coordinacion/coordinacion.page').then((m) => m.CoordinacionPage),
   },
   { path: 'trazabilidad', title: 'Trazabilidad · Urgentia 360', canMatch: [accesoPorRol], loadComponent: trazabilidad },
