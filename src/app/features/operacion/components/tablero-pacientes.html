@@ -1,0 +1,84 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Pacientes activos ({{ filas().length }})</mat-card-title>
+    <mat-card-subtitle>Tiempo en la etapa actual (espera + atención). Seleccione una fila para escanear.</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="pila">
+    <div class="fila filtros">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Etapa</mat-label>
+        <mat-select [value]="filtroEtapa()" (valueChange)="filtroEtapa.set($event)">
+          <mat-option value="todas">Todas</mat-option>
+          @for (e of etapas; track e.id) {
+            <mat-option [value]="e.id">{{ e.corto }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [value]="filtroAlerta()"
+        (change)="filtroAlerta.set($event.value)"
+        aria-label="Filtrar por alerta"
+      >
+        <mat-button-toggle value="todas">Todos</mat-button-toggle>
+        <mat-button-toggle value="alerta">En alerta</mat-button-toggle>
+        <mat-button-toggle value="rojo">Críticos</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div class="tabla-contenedor">
+      <table mat-table [dataSource]="visibles()" [trackBy]="trackFila" class="tabla">
+        <ng-container matColumnDef="turno">
+          <th mat-header-cell *matHeaderCellDef>Turno</th>
+          <td mat-cell *matCellDef="let f">
+            <strong>{{ f.paciente.turno }}</strong>
+            <app-insignia-triage [nivel]="f.paciente.triage" />
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="paciente">
+          <th mat-header-cell *matHeaderCellDef>Paciente</th>
+          <td mat-cell *matCellDef="let f">
+            {{ f.paciente.nombre }}
+            <span class="texto-suave bloque">{{ f.paciente.servicio }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="etapa">
+          <th mat-header-cell *matHeaderCellDef>Etapa</th>
+          <td mat-cell *matCellDef="let f">
+            {{ f.etapa.corto }}
+            @if (f.registro.revaloracion) {
+              <span class="texto-suave">· reval. {{ f.registro.revaloracion }}</span>
+            }
+            <span class="texto-suave bloque">{{ f.enAtencion ? 'En atención' : 'En espera' }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="responsable">
+          <th mat-header-cell *matHeaderCellDef>Responsable</th>
+          <td mat-cell *matCellDef="let f">{{ f.registro.responsable ?? '—' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tiempo">
+          <th mat-header-cell *matHeaderCellDef>Tiempo</th>
+          <td mat-cell *matCellDef="let f" class="numero">{{ f.tiempoMs | duracion }}</td>
+        </ng-container>
+        <ng-container matColumnDef="alerta">
+          <th mat-header-cell *matHeaderCellDef>Alerta</th>
+          <td mat-cell *matCellDef="let f"><app-insignia-alerta [nivel]="f.alerta" /></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas; sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let f; columns: columnas"
+          class="fila-tabla fila-{{ f.alerta }}"
+          [class.fila-seleccionada]="f.paciente.qr === seleccionado()"
+          tabindex="0"
+          (click)="seleccionar.emit(f.paciente.qr)"
+          (keydown.enter)="seleccionar.emit(f.paciente.qr)"
+        ></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell sin-datos" [attr.colspan]="columnas.length">Sin pacientes para el filtro.</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

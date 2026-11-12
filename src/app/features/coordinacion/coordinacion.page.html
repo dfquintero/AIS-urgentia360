@@ -1,0 +1,61 @@
+<section class="pagina pila">
+  <header class="encabezado-pagina">
+    <div>
+      <h1>Coordinación e indicadores</h1>
+      <p class="texto-suave">Tiempos por etapa, cuellos de botella y configuración de alertas</p>
+    </div>
+  </header>
+
+  <div class="grid-kpi">
+    <app-tarjeta-kpi titulo="Pacientes activos" [valor]="store.activos().length" [detalle]="store.egresados().length + ' egresados en el turno'" />
+    <app-tarjeta-kpi
+      titulo="Pacientes en alerta"
+      [valor]="alertas().rojo + alertas().amarillo"
+      [detalle]="alertas().rojo + ' críticos · ' + alertas().amarillo + ' en alerta'"
+      [tono]="alertas().rojo ? 'rojo' : alertas().amarillo ? 'amarillo' : 'verde'"
+    />
+    <app-tarjeta-kpi titulo="Tiempo promedio por etapa" [valor]="promedioEtapa() + ' min'" detalle="Espera + atención" tono="verde" />
+    <app-tarjeta-kpi
+      titulo="Cuello de botella"
+      [valor]="cuello()?.etapa ?? '—'"
+      [detalle]="cuello() ? cuello()!.espera + ' min de espera promedio' : ''"
+      tono="rojo"
+    />
+    <app-tarjeta-kpi titulo="Permanencia promedio" [valor]="permanenciaEgresados()" detalle="Pacientes egresados" />
+  </div>
+
+  <app-flujo-etapas [filas]="store.filas()" />
+
+  <div class="grid-coordinacion">
+    <mat-card appearance="outlined" class="ancho-doble">
+      <mat-card-header>
+        <mat-card-title>Tiempo promedio por etapa</mat-card-title>
+        <mat-card-subtitle>
+          Espera y atención en minutos.
+          @if (cuello(); as c) {
+            Cuello de botella: <strong class="texto-alerta">{{ c.nombre }}</strong> (resaltado en rojo).
+          }
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <app-grafico-tiempos [promedios]="promedios()" [cuello]="cuello()?.id ?? null" />
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Distribución por servicio</mat-card-title>
+        <mat-card-subtitle>Pacientes activos</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <app-grafico-servicios [datos]="servicios()" />
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <app-panel-umbrales
+    [umbrales]="store.umbrales()"
+    (cambio)="store.actualizarUmbral($event.etapa, $event.umbral)"
+    (restablecer)="store.restablecerUmbrales()"
+  />
+</section>

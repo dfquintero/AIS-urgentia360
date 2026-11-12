@@ -1,0 +1,203 @@
+@use '@angular/material' as mat;
+@use './theme/theme-colors' as keralty;
+
+// Paleta del manual de identidad Keralty (sección 3.6).
+:root {
+  --k-azul: #002f87;
+  --k-azul-oscuro: #002e58;
+  --k-azul-sec: #0071a3;
+  --k-celeste: #00b4e3;
+  --k-verde: #00b288;
+  --k-gris: #dcd5cb;
+  --texto: #212121;
+  --texto-suave: #5b6670;
+  --fondo: #f4f7fb;
+  --borde: #dde3ea;
+  --amarillo: #f2a900;
+  --amarillo-fondo: #fff4d6;
+  --amarillo-texto: #6d4b00;
+  --rojo: #c62828;
+  --rojo-fondo: #fde7e7;
+  --verde-fondo: #e3f6f0;
+  --fuente: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (primary: keralty.$primary-palette, tertiary: keralty.$tertiary-palette, theme-type: light),
+      typography: (plain-family: var(--fuente), brand-family: var(--fuente)),
+      density: -1,
+    )
+  );
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--fuente);
+  color: var(--texto);
+  background: var(--fondo);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { color: var(--k-azul); margin: 0; }
+h1 { font-size: 1.5rem; }
+p { margin: 0; }
+
+// Layout
+.pagina { max-width: 1440px; margin: 0 auto; padding: 16px; }
+.pila { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.pila-sm { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.pila-xs { display: flex; flex-direction: column; gap: 2px; }
+.fila { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.fila-sm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.crece { flex: 1 1 220px; min-width: 0; }
+.bloque { display: block; }
+.texto-suave { color: var(--texto-suave); font-size: 0.875rem; }
+.texto-alerta { color: var(--rojo); font-size: 0.875rem; }
+.etiqueta { font-weight: 600; font-size: 0.875rem; }
+.numero { font-variant-numeric: tabular-nums; font-weight: 600; }
+.encabezado-pagina { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; }
+.grid-operacion, .grid-coordinacion, .grid-acompanantes { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.grid-kpi { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+@media (min-width: 1100px) {
+  .grid-operacion { grid-template-columns: minmax(340px, 400px) minmax(0, 1fr); align-items: start; }
+  .grid-coordinacion { grid-template-columns: 2fr 1fr; }
+  .grid-acompanantes { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
+}
+mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
+.mat-mdc-card-header { padding-bottom: 8px; }
+
+// Encabezado de marca
+.barra {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 10px 16px; color: #fff;
+  background: linear-gradient(90deg, var(--k-azul-oscuro), var(--k-azul) 60%, var(--k-azul-sec));
+}
+.barra-marca { display: flex; align-items: center; gap: 10px; }
+.marca-simbolo {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px;
+  background: var(--k-verde); color: #fff; font-size: 28px; font-weight: 700; line-height: 1;
+}
+.marca-nombre { font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em; }
+.marca-sub { font-size: 0.8rem; opacity: 0.85; }
+.barra-estado { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.reloj { font-variant-numeric: tabular-nums; font-weight: 600; }
+.velocidad.mat-button-toggle-group { background: #fff; }
+.red-cifrada {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+  font-size: 0.78rem; background: rgb(0 178 136 / 22%); border: 1px solid rgb(255 255 255 / 35%);
+}
+.navegacion { background: #fff; border-bottom: 1px solid var(--borde); padding: 0 8px; }
+.aviso {
+  max-width: 1440px; margin: 12px auto 0; padding: 10px 14px; border-radius: 10px; font-size: 0.875rem;
+  background: #e6f2ff; color: var(--k-azul-oscuro); border-left: 4px solid var(--k-azul-sec);
+  width: calc(100% - 32px);
+}
+.pie { text-align: center; padding: 24px 16px; font-size: 0.8rem; color: var(--texto-suave); }
+
+// Insignias
+.insignia {
+  display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  white-space: nowrap; vertical-align: middle; margin-left: 4px;
+}
+.insignia-neutra { background: #eef1f4; color: var(--texto-suave); }
+.alerta-ok { background: var(--verde-fondo); color: #00664e; }
+.alerta-amarillo { background: var(--amarillo-fondo); color: var(--amarillo-texto); }
+.alerta-rojo { background: var(--rojo-fondo); color: var(--rojo); }
+.triage-I { background: #c62828; color: #fff; }
+.triage-II { background: #ef6c00; color: #fff; }
+.triage-III { background: #f9c80e; color: #3d2f00; }
+.triage-IV { background: #2e7d32; color: #fff; }
+.triage-V { background: #1565c0; color: #fff; }
+
+// KPIs
+.kpi {
+  display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 14px; height: 100%;
+  background: #fff; border: 1px solid var(--borde); border-top: 4px solid var(--k-azul-sec);
+}
+.kpi-verde { border-top-color: var(--k-verde); }
+.kpi-amarillo { border-top-color: var(--amarillo); }
+.kpi-rojo { border-top-color: var(--rojo); }
+.kpi-titulo { font-size: 0.8rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.04em; }
+.kpi-valor { font-size: 1.6rem; font-weight: 700; color: var(--k-azul); }
+.kpi-detalle { font-size: 0.8rem; color: var(--texto-suave); }
+
+// Flujo de etapas
+.flujo { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; list-style: none; margin: 0; padding: 0; }
+.flujo-etapa {
+  position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px;
+  border-radius: 12px; background: #fff; border: 1px solid var(--borde);
+}
+.flujo-obligatoria { border-color: var(--k-verde); box-shadow: inset 0 0 0 1px var(--k-verde); }
+.flujo-nombre { font-size: 0.8rem; color: var(--texto-suave); font-weight: 600; }
+.flujo-total { font-size: 1.5rem; font-weight: 700; color: var(--k-azul); }
+.flujo-alertas { display: flex; gap: 4px; align-items: center; min-height: 20px; }
+.flujo-nota { font-size: 0.7rem; color: #00664e; font-weight: 600; }
+.punto { padding: 0 7px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+
+// Escáner
+.escaneo-detalle, .turno-generado { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.qr { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.qr figcaption { font-size: 0.7rem; color: var(--texto-suave); font-family: ui-monospace, monospace; }
+.turno { font-size: 1.1rem; color: var(--k-azul); }
+.turno-grande { font-size: 2rem; font-weight: 800; color: var(--k-azul); letter-spacing: 0.04em; }
+.accion { font-weight: 600; font-size: 0.875rem; }
+.accion-entrada { color: var(--k-azul-sec); }
+.accion-salida { color: #00664e; }
+.selector-triage .mat-button-toggle-checked.triage-opcion-I { background: #c62828; color: #fff; }
+.selector-triage .mat-button-toggle-checked.triage-opcion-II { background: #ef6c00; color: #fff; }
+.selector-triage .mat-button-toggle-checked.triage-opcion-III { background: #f9c80e; color: #3d2f00; }
+.selector-triage .mat-button-toggle-checked.triage-opcion-IV { background: #2e7d32; color: #fff; }
+.selector-triage .mat-button-toggle-checked.triage-opcion-V { background: #1565c0; color: #fff; }
+
+// Tablero
+.tabla-contenedor { overflow: auto; max-height: 640px; border: 1px solid var(--borde); border-radius: 10px; }
+.tabla { width: 100%; min-width: 720px; }
+.fila-tabla { cursor: pointer; }
+.fila-tabla:hover { background: #f1f6fb; }
+.fila-amarillo { box-shadow: inset 4px 0 0 var(--amarillo); }
+.fila-rojo { box-shadow: inset 4px 0 0 var(--rojo); background: #fff8f8; }
+.fila-seleccionada { background: #e6f2ff !important; }
+.sin-datos { padding: 16px; text-align: center; color: var(--texto-suave); }
+.filtros mat-form-field { width: 180px; }
+
+// Bitácora
+.bitacora { list-style: none; margin: 0; padding: 0; max-height: 260px; overflow: auto; font-size: 0.85rem; }
+.evento { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0 6px 10px; border-left: 3px solid var(--borde); }
+.evento-turno { border-left-color: var(--k-celeste); }
+.evento-entrada { border-left-color: var(--k-azul-sec); }
+.evento-salida { border-left-color: var(--k-verde); }
+.evento-egreso { border-left-color: var(--k-azul); }
+.evento-hora { color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+
+// Coordinación
+.grafico { width: 100%; height: 320px; }
+.umbral { display: grid; grid-template-columns: 90px minmax(0, 1fr) 64px 64px; gap: 8px; align-items: center; }
+.umbral-nombre { font-weight: 600; font-size: 0.875rem; }
+.umbral-slider { width: 100%; margin: 0; }
+.umbral-valor { border-radius: 8px; padding: 2px; }
+.umbral-valor input { width: 100%; border: 0; background: transparent; font: inherit; font-weight: 700; text-align: center; color: inherit; }
+@media (max-width: 520px) {
+  .umbral { grid-template-columns: minmax(0, 1fr) 56px 56px; }
+  .umbral-slider { grid-column: 1 / -1; grid-row: 2; }
+}
+
+// Acompañantes
+.sala .mat-mdc-card-title { font-size: 1.3rem; }
+.sala-estado { font-size: 1rem; margin-bottom: 8px; }
+.sala-turnos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; list-style: none; margin: 0; padding: 0; }
+.sala-turno {
+  padding: 10px; text-align: center; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.04em;
+  color: var(--k-azul); background: #f1f6fb; border-radius: 10px; border: 1px solid var(--borde);
+}
+.movil { max-width: 360px; width: 100%; margin: 0 auto; padding: 12px; border-radius: 36px; background: var(--k-azul-oscuro); }
+.movil-pantalla { min-height: 520px; padding: 24px 18px; border-radius: 26px; background: #fff; }
+.movil-titulo { font-size: 1.2rem; }
+.movil-resultado { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px; border-radius: 14px; background: var(--verde-fondo); }
+.movil-estado { font-weight: 700; color: #00664e; font-size: 1.1rem; }
+.movil-nota { margin-top: auto; font-size: 0.75rem; color: var(--texto-suave); }
+
+.snack-error { --mat-snack-bar-container-color: var(--rojo); --mat-snack-bar-supporting-text-color: #fff; }
