@@ -18,6 +18,7 @@ import {
 } from '../../../core/domain/flujo';
 import { DestinoEgreso, EtapaId, Episodio, NivelTriageId, SolicitudEscaneo } from '../../../core/models/urgencias.models';
 import { InsigniaTriage } from '../../../shared/ui/insignia-triage';
+import { LectorQr } from '../../../shared/ui/lector-qr';
 import { QrPaciente } from '../../../shared/ui/qr-paciente';
 
 @Component({
@@ -32,6 +33,7 @@ import { QrPaciente } from '../../../shared/ui/qr-paciente';
     MatRadioModule,
     MatSelectModule,
     InsigniaTriage,
+    LectorQr,
     QrPaciente,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

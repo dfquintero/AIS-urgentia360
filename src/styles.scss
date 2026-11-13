@@ -254,3 +254,15 @@ mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
 .barra-ans { display: inline-block; width: 70%; height: 10px; border-radius: 5px; background: #eef1f4; overflow: hidden; vertical-align: middle; margin-right: 6px; }
 .barra-ans span { display: block; height: 100%; background: var(--rojo); }
 .barra-ans span.barra-ok { background: var(--k-verde); }
+
+// Lector QR con cámara
+.lector-qr { align-items: center; }
+.lector-visor {
+  position: relative; width: 100%; max-width: 320px; aspect-ratio: 1; overflow: hidden;
+  border-radius: 14px; background: #000;
+  video { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.lector-marco {
+  position: absolute; inset: 18%; border: 3px solid var(--k-verde); border-radius: 12px;
+  box-shadow: 0 0 0 999px rgb(0 0 0 / 35%);
+}
