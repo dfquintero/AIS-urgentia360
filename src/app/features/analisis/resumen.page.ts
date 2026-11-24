@@ -50,7 +50,7 @@ import { FiltrosAnalisis } from './components/filtros-analisis';
             <mat-card-subtitle>Ordenadas por espera promedio</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="tabla-contenedor">
-            <table class="tabla-simple">
+            <table class="tabla-simple tabla-compacta">
               <thead><tr><th>Etapa</th><th>Mediana</th><th>p90</th><th>En cola</th></tr></thead>
               <tbody>
                 @for (r of top(); track r.id; let i = $index) {
@@ -73,7 +73,7 @@ import { FiltrosAnalisis } from './components/filtros-analisis';
             <mat-card-subtitle>Todo el periodo transcurrido</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="tabla-contenedor">
-            <table class="tabla-simple">
+            <table class="tabla-simple tabla-compacta">
               <thead><tr><th>Indicador</th><th>Cumplimiento</th><th>Estado</th></tr></thead>
               <tbody>
                 @for (f of ansMedibles(); track f.d.id) {
