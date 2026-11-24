@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -118,6 +118,23 @@ export class App {
     { initialValue: this.router.url },
   );
   protected readonly esInicio = computed(() => this.url().startsWith('/inicio'));
+  private pausaAntesDeInicio: boolean | null = null;
+
+  constructor() {
+    // La reproducción no avanza mientras se ve la página de inicio; al entrar se restaura el estado anterior.
+    effect(() => {
+      const inicio = this.esInicio();
+      untracked(() => {
+        if (inicio && this.pausaAntesDeInicio == null) {
+          this.pausaAntesDeInicio = this.reloj.pausado();
+          this.reloj.pausado.set(true);
+        } else if (!inicio && this.pausaAntesDeInicio != null) {
+          this.reloj.pausado.set(this.pausaAntesDeInicio);
+          this.pausaAntesDeInicio = null;
+        }
+      });
+    });
+  }
   protected readonly pestanasVisibles = computed(() => this.pestanas.filter((t) => this.roles.puedeVer(t.vista)));
 
   protected cambiarRol(rol: RolUsuario): void {
