@@ -2,10 +2,10 @@
   <nav class="landing-nav" aria-label="Secciones">
     <span class="landing-logo"><span class="marca-simbolo" aria-hidden="true">+</span> Urgentia 360</span>
     <div class="landing-enlaces">
+      <button type="button" (click)="ir('equipo')">Equipo</button>
       <button type="button" (click)="ir('producto')">Producto</button>
       <button type="button" (click)="ir('como-funciona')">Cómo funciona</button>
       <button type="button" (click)="ir('presentacion')">Presentación</button>
-      <button type="button" (click)="ir('equipo')">Equipo</button>
       <button type="button" (click)="ir('roles')">Roles</button>
     </div>
     <button type="button" class="landing-cta landing-cta-sm" (click)="entrar('demo')">Entrar al prototipo</button>
@@ -40,6 +40,21 @@
       </div>
     </div>
   </header>
+
+  <section class="landing-seccion" id="equipo">
+    <span class="landing-kicker">Equipo de desarrollo</span>
+    <h2>AIS · Asociación Ingenieros Soluciones</h2>
+    <p class="landing-sub">Estudiantes de ingeniería que combinan sistemas y procesos industriales para hacer visible el flujo de urgencias.</p>
+    <ul class="landing-equipo">
+      @for (m of equipo; track m.nombre) {
+        <li class="landing-miembro">
+          <span class="landing-avatar" aria-hidden="true">{{ m.iniciales }}</span>
+          <strong>{{ m.nombre }}</strong>
+          <span>{{ m.carrera }}</span>
+        </li>
+      }
+    </ul>
+  </section>
 
   <section class="landing-cifras" aria-label="Cifras de la base sintética">
     @for (c of cifras; track c.etiqueta) {
@@ -127,21 +142,6 @@
       <h2>Del hospital a la red de atención.</h2>
       <p>Una posible evolución: conectar señales operativas de varias instituciones para comprender la red. Escenario hipotético que requeriría reglas clínicas, operativas y regulatorias definidas por las instituciones.</p>
     </div>
-  </section>
-
-  <section class="landing-seccion" id="equipo">
-    <span class="landing-kicker">Equipo de desarrollo</span>
-    <h2>AIS · Asociación Ingenieros Soluciones</h2>
-    <p class="landing-sub">Estudiantes de ingeniería que combinan sistemas y procesos industriales para hacer visible el flujo de urgencias.</p>
-    <ul class="landing-equipo">
-      @for (m of equipo; track m.nombre) {
-        <li class="landing-miembro">
-          <span class="landing-avatar" aria-hidden="true">{{ m.iniciales }}</span>
-          <strong>{{ m.nombre }}</strong>
-          <span>{{ m.carrera }}</span>
-        </li>
-      }
-    </ul>
   </section>
 
   <section class="landing-seccion" id="roles">
