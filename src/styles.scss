@@ -359,6 +359,7 @@ a.barra-marca { color: inherit; text-decoration: none; }
 
 .landing-seccion { max-width: 1180px; margin: 0 auto; padding: clamp(56px, 8vw, 104px) clamp(16px, 4vw, 32px); display: flex; flex-direction: column; gap: 18px; }
 .landing-seccion h2 { font-size: clamp(1.8rem, 3.6vw, 2.8rem); line-height: 1.1; font-weight: 800; max-width: 760px; }
+.landing-seccion:focus { outline: none; }
 .landing-kicker { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--l-celeste); }
 .landing-sub { margin: 0; color: var(--l-suave); font-size: 1.05rem; max-width: 680px; line-height: 1.6; }
 

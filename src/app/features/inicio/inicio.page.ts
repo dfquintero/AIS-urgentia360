@@ -91,6 +91,11 @@ export class InicioPage {
   }
 
   protected ir(seccion: string): void {
-    this.host.nativeElement.querySelector(`#${seccion}`)?.scrollIntoView({ behavior: 'smooth' });
+    const destino = this.host.nativeElement.querySelector<HTMLElement>(`#${seccion}`);
+    if (!destino) return;
+    // Mueve también el foco, para que el siguiente Tab continúe desde la sección elegida.
+    if (!destino.hasAttribute('tabindex')) destino.setAttribute('tabindex', '-1');
+    destino.focus({ preventScroll: true });
+    destino.scrollIntoView({ behavior: 'smooth' });
   }
 }
