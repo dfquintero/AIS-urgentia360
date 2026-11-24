@@ -61,14 +61,14 @@ const MODULOS = [
   },
 ] as const;
 
-const SISTEMAS = 'Estudiante de Ingeniería de Sistemas y Computación';
-const INDUSTRIAL = 'Estudiante de Ingeniería Industrial';
+const SISTEMAS = { area: 'sistemas', etiqueta: 'Sistemas', carrera: 'Estudiante de Ingeniería de Sistemas y Computación' } as const;
+const INDUSTRIAL = { area: 'industrial', etiqueta: 'Industrial', carrera: 'Estudiante de Ingeniería Industrial' } as const;
 const EQUIPO = [
-  { nombre: 'Juan Beltrán', carrera: SISTEMAS },
-  { nombre: 'Héctor Noriega', carrera: INDUSTRIAL },
-  { nombre: 'Juan Castañeda', carrera: SISTEMAS },
-  { nombre: 'Santiago Carrillo', carrera: INDUSTRIAL },
-  { nombre: 'Diego Quintero', carrera: SISTEMAS },
+  { nombre: 'Juan Beltrán', ...SISTEMAS },
+  { nombre: 'Héctor Noriega', ...INDUSTRIAL },
+  { nombre: 'Juan Castañeda', ...SISTEMAS },
+  { nombre: 'Santiago Carrillo', ...INDUSTRIAL },
+  { nombre: 'Diego Quintero', ...SISTEMAS },
 ].map((m) => ({ ...m, iniciales: m.nombre.split(' ').map((p) => p[0]).join('') }));
 
 const PASOS = [
