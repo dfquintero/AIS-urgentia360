@@ -101,6 +101,21 @@ export class CarruselDiapositivas {
     carrusel?.requestFullscreen?.().catch(() => undefined);
   }
 
+  /** En pantalla completa (o en el visor fijo de respaldo) el foco no sale del carrusel. */
+  private retenerFoco(evento: KeyboardEvent): void {
+    const enfocables = [...this.host.nativeElement.querySelectorAll<HTMLElement>('.carrusel button:not([disabled])')].filter(
+      (b) => b.offsetParent !== null,
+    );
+    if (!enfocables.length) return;
+    const primero = enfocables[0];
+    const ultimo = enfocables[enfocables.length - 1];
+    const dentro = enfocables.includes(document.activeElement as HTMLElement);
+    if (!dentro || (evento.shiftKey && document.activeElement === primero) || (!evento.shiftKey && document.activeElement === ultimo)) {
+      evento.preventDefault();
+      (evento.shiftKey ? ultimo : primero).focus();
+    }
+  }
+
   protected alSalirDePantallaCompleta(): void {
     if (!document.fullscreenElement) this.completo.set(false);
   }
@@ -108,6 +123,10 @@ export class CarruselDiapositivas {
   protected tecla(evento: KeyboardEvent): void {
     const enFoco = this.host.nativeElement.contains(document.activeElement);
     if (!this.completo() && !enFoco) return;
+    if (evento.key === 'Tab' && this.completo()) {
+      this.retenerFoco(evento);
+      return;
+    }
     const acciones: Record<string, () => void> = {
       ArrowLeft: () => this.anterior(),
       ArrowRight: () => this.siguiente(),
