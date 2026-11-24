@@ -87,6 +87,16 @@ El contenido de `dist/urgentia360/browser/` es un sitio estático: puede subirse
 hosting estático (GitHub Pages, Netlify, un servidor web interno). Las rutas usan `#`
 (`/#/pacientes`), así que no requiere configurar el servidor.
 
+### 4.1 Publicación en GitHub Pages
+
+El workflow `.github/workflows/pages.yml` compila, ejecuta las pruebas y publica `dist/urgentia360/browser/` en
+cada push a `main` (también se puede lanzar a mano desde **Actions → Publicar en GitHub Pages → Run workflow**).
+
+Activación (una sola vez, la hace quien administra el repositorio): **Settings → Pages → Build and deployment →
+Source: GitHub Actions**. La app queda en `https://dfquintero.github.io/AIS-urgentia360/`. No requiere más ajustes:
+`<base href="./">`, las rutas con `#` y las cargas relativas (`datos/`, `diapositivas/`, `landing/`) funcionan en
+la subcarpeta del repositorio, y al servirse por HTTPS la cámara para leer QR funciona también desde el celular.
+
 ### 5. Ver la vista móvil de acompañantes
 
 - **En el computador:** abrir las herramientas de desarrollador (`F12`), activar la barra de
