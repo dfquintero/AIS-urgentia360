@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CentroRed, distanciaKm, Punto, tiempoEnCarro } from '../../../core/domain/red';
+import { CentroRed, distanciaKm, franjaHoraria, ocupacion, Punto, textoOcupacion, tiempoEnCarro } from '../../../core/domain/red';
 import { MapaBogota } from './mapa-bogota';
 
 @Component({
@@ -22,14 +22,15 @@ import { MapaBogota } from './mapa-bogota';
       </label>
     </div>
     <app-mapa-bogota [centros]="centros()" [origen]="origen()" (elegir)="mover.emit($event)" />
-    <p class="app-suave">Toca el mapa para cambiar el punto de partida. Tiempo estimado en carro a las {{ hora() }}:00.</p>
+    <p class="app-suave">Toca el mapa para cambiar el punto de partida. Tiempo en carro y ocupación estimados a las {{ hora() }}:00 (franja {{ franja() }}).</p>
     <ol class="app-lista">
       @for (f of filas(); track f.centro.id) {
         <li>
           <span class="app-numero">{{ f.n }}</span>
           <span class="app-crece">
             <strong>{{ f.centro.nombre }}</strong>
-            <small>{{ f.centro.localidad }} · {{ f.km }} km</small>
+            <small>{{ f.centro.localidad }} · {{ f.km }} km · {{ f.ocupacion }}</small>
+            <small>{{ f.centro.servicios.join(' · ') }}</small>
           </span>
           <span class="app-minutos">{{ f.min }} min</span>
         </li>
@@ -45,6 +46,7 @@ export class PantallaCerca {
   readonly ubicar = output<void>();
   readonly mover = output<Punto>();
 
+  protected readonly franja = computed(() => franjaHoraria(this.hora()).nombre.toLowerCase());
   protected readonly horas = Array.from({ length: 24 }, (_, h) => h);
   protected readonly filas = computed(() =>
     this.centros()
@@ -52,6 +54,7 @@ export class PantallaCerca {
         centro, n: i + 1,
         km: (Math.round(distanciaKm(this.origen(), centro.posicion) * 10) / 10).toLocaleString('es-CO'),
         min: tiempoEnCarro(this.origen(), centro.posicion, this.hora()),
+        ocupacion: textoOcupacion(ocupacion(centro, this.hora())),
       }))
       .sort((a, b) => a.min - b.min),
   );
