@@ -119,7 +119,8 @@ no es de confianza: acepte continuar (solo para la demo) y conceda el permiso de
 
 ### 7. Página de inicio y presentación
 
-Al abrir la app se muestra la página de inicio (`#/inicio`): características, recorrido del paciente, la
+Al abrir la app se muestra la página de inicio (`#/inicio`): portada, capturas del prototipo en marcos de
+escritorio y celular, módulos principales, cómo funciona, la
 presentación en un carrusel con **pantalla completa** (flechas del teclado, deslizar en el celular, `Esc` para salir)
 y botones para entrar con cada rol simulado. El logo de la barra superior vuelve a esta página.
 
@@ -129,6 +130,9 @@ cambia, se regeneran con (requiere LibreOffice, `poppler-utils` y Pillow; la dia
 ```bash
 python scripts/exportar_diapositivas.py --omitir 1
 ```
+
+Las imágenes de la página están en `public/landing/`: capturas del prototipo e ilustraciones generadas con IA
+(`hero`, `qr`, `red`).
 
 ---
 

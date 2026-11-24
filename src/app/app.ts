@@ -73,7 +73,6 @@ import { RedCifrada } from './shared/ui/red-cifrada';
       <app-aviso-clinico />
       <router-outlet />
     </mat-tab-nav-panel>
-    }
 
     <footer class="pie pila-sm">
       <div class="pie-insignias">
@@ -89,6 +88,7 @@ import { RedCifrada } from './shared/ui/red-cifrada';
         conceptuales, sin integración.
       </span>
     </footer>
+    }
   `,
 })
 export class App {
