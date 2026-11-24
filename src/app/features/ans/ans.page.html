@@ -2,18 +2,19 @@
   <header class="encabezado-pagina">
     <div>
       <h1>Gestión de ANS</h1>
-      <p class="texto-suave">Cumplimiento por indicador hasta {{ store.ahora() | hora: 'fecha-hora' }} · separa obligaciones normativas, metas operativas y ANS contractuales</p>
+      <p class="texto-suave">Cumplimiento por indicador hasta {{ store.ahora() | hora: 'fecha-hora' }}</p>
     </div>
-    <label class="objetivo-ans">
-      Objetivo de cumplimiento
-      <input type="number" min="1" max="100" [value]="store.objetivoAns()" [disabled]="!roles.perfil().configuraUmbrales" (change)="cambiarObjetivo($any($event.target).value)" aria-label="Objetivo de cumplimiento en porcentaje" />
-      % <span class="texto-suave">(ilustrativo)</span>
-    </label>
+    <div class="objetivo-ans">
+      Objetivo de cumplimiento: <strong>{{ store.objetivoAns() }} %</strong> <span class="texto-suave">(ilustrativo)</span>
+      @if (roles.perfil().configuraUmbrales) {
+        <a class="enlace" routerLink="/configuracion">Editar metas →</a>
+      }
+    </div>
   </header>
 
   <div class="aviso aviso-ans" role="note">
     Solo Triage I (inmediata) y II (≤ 30 min) son referencias normativas (Res. 5596 de 2015). Las metas operativas son
-    institucionales y están <strong>por definir</strong>: escriba un valor para simular su seguimiento. Los ANS
+    institucionales y están <strong>por definir</strong>: coordinación puede simular una meta en Configuración. Los ANS
     contractuales con entidades pagadoras no están disponibles (no se entregaron contratos ni fórmulas).
   </div>
 
@@ -33,11 +34,7 @@
               <td><strong>{{ f.d.nombre }}</strong><span class="texto-suave bloque">{{ f.d.descripcion }} · {{ f.d.fuente }}</span></td>
               <td><span class="insignia tipo-{{ f.d.tipo }}">{{ f.d.tipo }}</span></td>
               <td>
-                @if (f.d.editable && roles.perfil().configuraUmbrales) {
-                  <input class="meta-ans" type="number" min="0" placeholder="Por definir" [value]="f.meta ?? ''" (change)="cambiarMeta(f.d, $any($event.target).value)" [attr.aria-label]="'Meta ' + f.d.nombre" />
-                } @else {
-                  {{ f.meta == null ? 'Por definir' : f.meta === 0 ? 'Inmediata' : f.meta }}
-                }
+                {{ f.meta == null ? 'Por definir' : f.meta === 0 ? 'Inmediata' : f.meta }}
               </td>
               <td class="numero">{{ f.medidos }}</td>
               <td class="numero">{{ f.cumplimiento == null ? '—' : f.cumplen }}</td>

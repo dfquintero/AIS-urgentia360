@@ -6,8 +6,13 @@ describe('matriz de roles simulados', () => {
   });
 
   it('el perfil directivo/analista solo ve indicadores agregados', () => {
-    expect(perfilDe('analista').vistas).toEqual(['cuellos', 'ans', 'coordinacion']);
+    expect(perfilDe('analista').vistas).toEqual(['resumen', 'etapas', 'horarios', 'perfiles', 'ayudas', 'ans']);
     expect(perfilDe('analista').configuraUmbrales).toBe(false);
+  });
+
+  it('asistencial ve solo pacientes, registro y trazabilidad; configuración solo para quien configura umbrales', () => {
+    expect(perfilDe('asistencial').vistas).toEqual(['pacientes', 'registro', 'trazabilidad']);
+    for (const p of PERFILES) expect(p.vistas.includes('configuracion')).toBe(p.configuraUmbrales);
   });
 
   it('ningún perfil distinto de demostración combina acompañantes con vistas clínicas', () => {

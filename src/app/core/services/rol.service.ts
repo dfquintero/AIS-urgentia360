@@ -1,7 +1,21 @@
 import { Injectable, computed, signal } from '@angular/core';
 
 export type RolUsuario = 'demo' | 'asistencial' | 'coordinacion' | 'analista' | 'acompanante';
-export type Vista = 'cuellos' | 'ans' | 'operacion' | 'coordinacion' | 'trazabilidad' | 'acompanantes';
+export type Vista =
+  | 'resumen'
+  | 'etapas'
+  | 'horarios'
+  | 'perfiles'
+  | 'ayudas'
+  | 'ans'
+  | 'pacientes'
+  | 'registro'
+  | 'trazabilidad'
+  | 'configuracion'
+  | 'acompanantes';
+
+const ANALISIS: readonly Vista[] = ['resumen', 'etapas', 'horarios', 'perfiles', 'ayudas', 'ans'];
+const OPERACION: readonly Vista[] = ['pacientes', 'registro', 'trazabilidad'];
 
 export interface PerfilRol {
   id: RolUsuario;
@@ -17,28 +31,28 @@ export const PERFILES: readonly PerfilRol[] = [
     id: 'demo',
     nombre: 'Demostración',
     descripcion: 'Todas las vistas, para presentar el prototipo',
-    vistas: ['cuellos', 'ans', 'operacion', 'coordinacion', 'trazabilidad', 'acompanantes'],
+    vistas: [...ANALISIS, ...OPERACION, 'configuracion', 'acompanantes'],
     configuraUmbrales: true,
   },
   {
     id: 'asistencial',
     nombre: 'Médico / Enfermería',
     descripcion: 'Estado de pacientes y alertas pertinentes',
-    vistas: ['operacion', 'trazabilidad'],
+    vistas: OPERACION,
     configuraUmbrales: false,
   },
   {
     id: 'coordinacion',
     nombre: 'Coordinación de urgencias',
     descripcion: 'Cola, capacidad, demoras y umbrales',
-    vistas: ['cuellos', 'ans', 'operacion', 'coordinacion', 'trazabilidad'],
+    vistas: [...ANALISIS, ...OPERACION, 'configuracion'],
     configuraUmbrales: true,
   },
   {
     id: 'analista',
     nombre: 'Directivo / Analista',
     descripcion: 'Solo indicadores agregados',
-    vistas: ['cuellos', 'ans', 'coordinacion'],
+    vistas: ANALISIS,
     configuraUmbrales: false,
   },
   {
