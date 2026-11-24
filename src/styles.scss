@@ -435,9 +435,29 @@ a.barra-marca { color: inherit; text-decoration: none; }
   span { color: var(--l-suave); font-size: 0.86rem; line-height: 1.4; }
 }
 .landing-avatar {
-  display: grid; place-items: center; width: 72px; height: 72px; margin-bottom: 8px; border-radius: 50%;
-  font-weight: 800; font-size: 1.4rem; color: #04111f !important; background: linear-gradient(135deg, var(--l-celeste), var(--l-verde));
-  box-shadow: 0 10px 30px rgb(0 180 227 / 30%);
+  --a1: var(--l-celeste); --a2: var(--l-verde);
+  position: relative; display: grid; place-items: center; width: 104px; height: 104px; margin-bottom: 14px; border-radius: 50%;
+  font-weight: 900; font-size: 2.3rem; letter-spacing: 0.04em; color: #fff !important;
+  text-shadow: 0 2px 10px rgb(0 0 0 / 35%);
+  background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 35%), transparent 45%), linear-gradient(135deg, var(--a1), var(--a2));
+  box-shadow: 0 0 0 4px var(--l-fondo), 0 0 0 6px color-mix(in srgb, var(--a1) 70%, transparent), 0 16px 40px color-mix(in srgb, var(--a1) 45%, transparent);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  &::after {
+    content: ''; position: absolute; inset: -14px; border-radius: 50%; z-index: -1; filter: blur(18px); opacity: 0.55;
+    background: conic-gradient(from 0deg, var(--a1), var(--a2), var(--a1));
+  }
+}
+.landing-miembro { position: relative; isolation: isolate; transition: transform 0.25s ease, border-color 0.25s ease; }
+.landing-miembro:hover { transform: translateY(-4px); border-color: rgb(255 255 255 / 22%); }
+.landing-miembro:hover .landing-avatar { transform: scale(1.08) rotate(-3deg); }
+.landing-miembro:nth-child(5n + 1) .landing-avatar { --a1: #3d8bff; --a2: #00b4e3; }
+.landing-miembro:nth-child(5n + 2) .landing-avatar { --a1: #00d2a0; --a2: #8cc63f; }
+.landing-miembro:nth-child(5n + 3) .landing-avatar { --a1: #a35bff; --a2: #3d8bff; }
+.landing-miembro:nth-child(5n + 4) .landing-avatar { --a1: #00b4e3; --a2: #00d2a0; }
+.landing-miembro:nth-child(5n + 5) .landing-avatar { --a1: #ff6b9a; --a2: #a35bff; }
+@media (prefers-reduced-motion: reduce) {
+  .landing-miembro, .landing-avatar { transition: none; }
+  .landing-miembro:hover, .landing-miembro:hover .landing-avatar { transform: none; }
 }
 .landing-roles { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); margin-top: 8px; }
 .landing-rol {
