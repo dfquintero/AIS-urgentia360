@@ -432,12 +432,12 @@ a.barra-marca { color: inherit; text-decoration: none; }
   display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 26px 18px; text-align: center;
   border-radius: 20px; background: linear-gradient(180deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 2%)); border: 1px solid var(--l-borde);
   strong { color: #fff; font-size: 1.05rem; }
-  span { color: var(--l-suave); font-size: 0.86rem; line-height: 1.4; }
+  span:not(.landing-avatar) { color: var(--l-suave); font-size: 0.86rem; line-height: 1.4; }
 }
 .landing-avatar {
   --a1: var(--l-celeste); --a2: var(--l-verde);
   position: relative; display: grid; place-items: center; width: 104px; height: 104px; margin-bottom: 14px; border-radius: 50%;
-  font-weight: 900; font-size: 2.3rem; letter-spacing: 0.04em; color: #fff !important;
+  font-weight: 900; font-size: 2.3rem; letter-spacing: 0.04em; color: #fff;
   text-shadow: 0 2px 10px rgb(0 0 0 / 35%);
   background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 35%), transparent 45%), linear-gradient(135deg, var(--a1), var(--a2));
   box-shadow: 0 0 0 4px var(--l-fondo), 0 0 0 6px color-mix(in srgb, var(--a1) 70%, transparent), 0 16px 40px color-mix(in srgb, var(--a1) 45%, transparent);
