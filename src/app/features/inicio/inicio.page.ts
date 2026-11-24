@@ -61,6 +61,16 @@ const MODULOS = [
   },
 ] as const;
 
+const SISTEMAS = 'Estudiante de Ingeniería de Sistemas y Computación';
+const INDUSTRIAL = 'Estudiante de Ingeniería Industrial';
+const EQUIPO = [
+  { nombre: 'Juan Beltrán', carrera: SISTEMAS },
+  { nombre: 'Héctor Noriega', carrera: INDUSTRIAL },
+  { nombre: 'Juan Castañeda', carrera: SISTEMAS },
+  { nombre: 'Santiago Carrillo', carrera: INDUSTRIAL },
+  { nombre: 'Diego Quintero', carrera: SISTEMAS },
+].map((m) => ({ ...m, iniciales: m.nombre.split(' ').map((p) => p[0]).join('') }));
+
 const PASOS = [
   { titulo: 'Captura', texto: 'Digiturno genera el turno y el QR; cada escaneo registra entrada y salida de etapa.' },
   { titulo: 'Trazabilidad', texto: 'Los eventos se ordenan en una línea de tiempo por episodio, con fuente y responsable.' },
@@ -82,6 +92,7 @@ export class InicioPage {
   protected readonly cifras = CIFRAS;
   protected readonly modulos = MODULOS;
   protected readonly pasos = PASOS;
+  protected readonly equipo = EQUIPO;
   protected readonly etapas = ETAPAS;
   protected readonly perfiles = PERFILES;
 
