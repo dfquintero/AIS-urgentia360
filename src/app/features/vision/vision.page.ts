@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
-  compararAlternativas, dentroDeBogota, generarCentros, ORIGEN_SIMULADO, Prediagnostico, prioridadOrientativa, Punto,
+  compararAlternativas, dentroDeBogota, generarCentros, ORIGEN_SIMULADO, Prediagnostico, prioridadOrientativa, Punto, Solicitud,
 } from '../../core/domain/red';
 import { PerfilLocalService } from '../../core/services/perfil-local.service';
 import { PantallaCerca } from './components/pantalla-cerca';
@@ -47,7 +47,16 @@ export class VisionPage {
     const datos: Prediagnostico = { ...r, edad: p?.edad ?? null, embarazo: p?.embarazo ?? false, condiciones: p?.condiciones ?? '' };
     return prioridadOrientativa(datos);
   });
-  protected readonly alternativas = computed(() => compararAlternativas(this.origen(), this.centros, this.prioridad() ?? 'media', this.hora()));
+  protected readonly solicitud = computed<Solicitud>(() => {
+    const p = this.perfil();
+    return {
+      prioridad: this.prioridad() ?? 'media',
+      sintoma: this.respuestas()?.sintoma ?? 'Otro',
+      edad: p?.edad ?? null,
+      embarazo: p?.embarazo ?? false,
+    };
+  });
+  protected readonly alternativas = computed(() => compararAlternativas(this.origen(), this.centros, this.solicitud(), this.hora()));
   protected readonly salida = computed(() => {
     const diferencia = this.hora() - horaBogota(this.ahora);
     return diferencia === 0 ? this.ahora : new Date(Math.floor(this.ahora.getTime() / 3_600_000) * 3_600_000 + diferencia * 3_600_000);

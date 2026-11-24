@@ -612,6 +612,8 @@ a.landing-logo, a.landing-cta, a.landing-secundario { text-decoration: none; }
 .app-tabla-fila span:first-child { text-align: left; }
 .app-tabla-encabezado span { background: #0e1626; border-color: #2b3a52; color: var(--l-azul); font-weight: 700; font-size: 0.68rem; }
 .app-mejor span { background: #142b2a; border-color: #4fd1a5; }
+.app-detalle { display: block; margin-top: 3px; color: var(--l-suave); font-size: 0.64rem; line-height: 1.3; }
+.app-criterios strong { color: #fff; }
 .app-conclusion { margin: 0; text-align: center; color: #4fd1a5; font-weight: 700; font-size: 0.8rem; }
 .app-linea { list-style: none; margin: 0; padding: 0 0 0 14px; border-left: 2px dashed rgb(0 210 160 / 50%); display: flex; flex-direction: column; gap: 10px; }
 .app-linea li { position: relative; display: flex; gap: 10px; align-items: baseline; }

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { Alternativa, CentroRed, ETIQUETA_PRIORIDAD, hitosRecorrido, Prioridad, Punto } from '../../../core/domain/red';
+import { Alternativa, CentroRed, ETIQUETA_PRIORIDAD, franjaHoraria, hitosRecorrido, Prioridad, Punto, serviciosRequeridos, Solicitud, textoOcupacion } from '../../../core/domain/red';
 import { PerfilLocal } from '../../../core/services/perfil-local.service';
 import { MapaBogota } from './mapa-bogota';
 
@@ -22,7 +22,10 @@ const LETRAS = 'ABCDEFGHIJ';
         </div>
         @for (a of filas(); track a.centro.id) {
           <div class="app-tabla-fila" role="row" [class.app-mejor]="$first">
-            <span role="cell"><strong>{{ a.letra }}</strong> · {{ a.centro.nombre }}</span>
+            <span role="cell">
+              <strong>{{ a.letra }}</strong> · {{ a.centro.nombre }}
+              <small class="app-detalle">{{ textoOcupacion(a.ocupacion) }} · {{ a.centro.consultorios }} consultorios{{ a.faltantes.length ? ' · sin ' + a.faltantes.join(', ') : '' }}</small>
+            </span>
             <span role="cell">{{ a.desplazamiento }} min</span>
             <span role="cell">{{ a.espera }} min</span>
             <span role="cell"><strong>{{ a.total }} min</strong></span>
@@ -31,6 +34,10 @@ const LETRAS = 'ABCDEFGHIJ';
       </div>
       <p class="app-conclusion">
         La alternativa {{ filas()[0].letra }} presenta el menor total estimado en este ejemplo{{ masCercana() ? '' : ', aunque no es la más cercana' }}.
+      </p>
+      <p class="app-suave app-criterios">
+        Espera calculada con: prioridad <strong>{{ etiqueta[p] }}</strong> · síntoma <strong>{{ solicitud().sintoma }}</strong>{{ requeridos().length ? ' (requiere ' + requeridos().join(', ') + ')' : '' }}
+        · franja <strong>{{ franja().nombre }}</strong> ({{ hora() }}:00). Cada centro tiene su propia ocupación por hora, consultorios y servicios.
       </p>
       <app-mapa-bogota [centros]="centros()" [origen]="origen()" [destacado]="filas()[0].centro.id" [mostrarRuta]="true" />
       <h3 class="app-subtitulo">Tu recorrido estimado</h3>
@@ -65,9 +72,14 @@ export class PantallaRecorrido {
   readonly prioridad = input<Prioridad | null>(null);
   readonly perfil = input<PerfilLocal | null>(null);
   readonly salida = input.required<Date>();
+  readonly solicitud = input.required<Solicitud>();
+  readonly hora = input.required<number>();
   readonly irAPrediagnostico = output<void>();
 
   protected readonly etiqueta = ETIQUETA_PRIORIDAD;
+  protected readonly requeridos = computed(() => serviciosRequeridos(this.solicitud()));
+  protected readonly franja = computed(() => franjaHoraria(this.hora()));
+  protected readonly textoOcupacion = textoOcupacion;
   protected readonly filas = computed(() => this.alternativas().slice(0, 3).map((a, i) => ({ ...a, letra: LETRAS[i] })));
   protected readonly masCercana = computed(() => {
     const min = Math.min(...this.alternativas().map((a) => a.desplazamiento));
