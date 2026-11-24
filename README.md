@@ -85,7 +85,7 @@ Abrir <http://localhost:8080/>. Alternativa sin instalar nada adicional, si se t
 
 El contenido de `dist/urgentia360/browser/` es un sitio estático: puede subirse tal cual a cualquier
 hosting estático (GitHub Pages, Netlify, un servidor web interno). Las rutas usan `#`
-(`/#/operacion`), así que no requiere configurar el servidor.
+(`/#/pacientes`), así que no requiere configurar el servidor.
 
 ### 5. Ver la vista móvil de acompañantes
 
@@ -101,7 +101,7 @@ hosting estático (GitHub Pages, Netlify, un servidor web interno). Las rutas us
 
 ### 6. Leer el QR con la cámara
 
-Operación (escáner) y Acompañantes tienen el botón **Leer QR con la cámara**: lee el QR del paciente
+Registro QR (escáner) y Acompañantes tienen el botón **Leer QR con la cámara**: lee el QR del paciente
 (por ejemplo, el que aparece en Trazabilidad o en «Último turno generado») y llena el código de turno.
 En Acompañantes el código de verificación se sigue escribiendo a mano.
 
@@ -121,30 +121,35 @@ no es de confianza: acepte continuar (solo para la demo) y conceda el permiso de
 
 La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes del corte de la simulación) a 10×.
 
-1. **Rol simulado** (botón "Rol: …" del encabezado, sin login real): cada perfil ve solo sus vistas, según la
+1. **Rol simulado** (botón con el nombre del rol, a la derecha del encabezado, sin login real): cada perfil ve solo sus vistas, según la
    matriz sugerida por Kantera (no es un esquema de permisos aprobado):
 
    | Rol | Vistas |
    |---|---|
-   | Demostración | Todas |
-   | Médico / Enfermería | Operación, Trazabilidad |
-   | Coordinación de urgencias | Operación, Coordinación (con umbrales), Trazabilidad |
-   | Directivo / Analista | Coordinación (solo indicadores agregados) |
+   | Demostración | Las 11 pestañas |
+   | Médico / Enfermería | Pacientes, Registro QR, Trazabilidad |
+   | Coordinación de urgencias | Todas menos Acompañantes (incluye Configuración) |
+   | Directivo / Analista | Resumen, Etapas, Horarios, Perfiles, Ayudas Dx, ANS (solo indicadores agregados) |
    | Acompañante | Acompañantes |
-1. **Controles del encabezado:** pausa, velocidad (1× a 300×) y **Ir a…** para saltar al inicio del periodo, a un
+1. **Controles del encabezado:** pausa (▶/❚❚) y el menú de velocidad (1× a 300×), que también tiene **Ir a…** para saltar al inicio del periodo, a un
    pico de demanda o al corte (15 oct, 00:00), donde quedan los 10 episodios abiertos de la base.
-2. **Operación** (`#/operacion`):
-   1. El tablero muestra los episodios activos con su etapa, tiempo, órdenes pendientes y el motivo de la alerta
-      (umbral ilustrativo de la etapa o meta normativa de Triage I/II).
-   2. Pulsar **+ Generar turno (Punto 0)**: se crea un episodio nuevo en espera de triage, con su QR.
-   3. Elegir un responsable (código ficticio) y **Registrar entrada** a Triage. Para salir, el botón exige la
-      clasificación (I–V) que asigna el profesional.
-   4. Seleccionar un episodio del tablero y registrar sus hitos: desde la primera valoración se elige
-      **ayudas diagnósticas** o **definir conducta**; el egreso exige el destino (alta, hospitalización, remisión, otro).
-   5. La bitácora mezcla los eventos reproducidos de la base con los registros manuales (marcados "QR manual").
-3. **Coordinación** (`#/coordinacion`): filtrar por triage y franja; revisar turno→triage, fin de triage→médico,
-   Triage II > 30 min (ilustrativo), órdenes sin revisar, cuello de botella y carga frente a capacidad simulada.
-   Las metas de Triage III–V quedan **por definir** y pueden configurarse.
+2. **Análisis de cuellos de botella** (Resumen, Etapas, Horarios, Perfiles, Ayudas Dx): todas comparten la barra de
+   filtros (ventana, triage y franja), que se conserva al cambiar de pestaña.
+   - **Resumen** (`#/resumen`): hallazgo principal, indicadores clave, etapas con más espera y ANS con meta.
+   - **Etapas** (`#/etapas`): ranking por espera (promedio, mediana, p90, cola actual) y espera/atención por etapa.
+   - **Horarios** (`#/horarios`): mapa etapa × hora de llegada y demanda frente a capacidad simulada.
+   - **Perfiles** (`#/perfiles`): espera por etapa según triage, tipo de demanda o grupo de edad.
+   - **Ayudas Dx** (`#/ayudas`): solicitud → toma → resultado → revisión y órdenes detenidas.
+   - **ANS** (`#/ans`): cumplimiento por indicador y tendencia diaria; las metas se editan en **Configuración**.
+3. **Operación:**
+   1. **Pacientes** (`#/pacientes`): episodios activos con etapa, tiempo, órdenes pendientes y motivo de la alerta.
+      Al seleccionar una fila se abre **Registro QR** con ese turno.
+   2. **Registro QR** (`#/registro`): **+ Generar turno (Punto 0)** crea un episodio en espera de triage con su QR.
+      Elegir un responsable (código ficticio) y **Registrar entrada**; para salir de Triage se exige la clasificación
+      (I–V) que asigna el profesional. Desde la primera valoración se elige **ayudas diagnósticas** o **definir
+      conducta**; el egreso exige el destino. La bitácora mezcla los eventos de la base con los registros manuales.
+   3. **Configuración** (`#/configuracion`, solo coordinación): umbrales por etapa, metas de Triage III–V (por
+      definir) y metas operativas de ANS.
 4. **Trazabilidad** (`#/trazabilidad`): los tres casos de demostración de la base (demora post-triage, órdenes sin
    resultado y episodio abierto). Cada episodio muestra hitos, órdenes y la línea de tiempo con fuente
    (Sofía/Digiturno, HIS/Athenea, LIS, PACS/RIS, todas referenciales), rol y origen del registro.
@@ -180,7 +185,7 @@ npm run build               # verifica que la aplicación compile
 
 - Angular 22: componentes standalone, signals y control flow.
 - Angular Material con tema generado a partir de la paleta Keralty.
-- ngx-echarts / ECharts (carga diferida, solo en Coordinación).
+- ngx-echarts / ECharts (carga diferida, solo en las pestañas con gráficos).
 - angularx-qrcode para QR legibles por lectores reales.
 - Tipografía del sistema operativo (sin fuentes web).
 
@@ -196,11 +201,16 @@ de seguir la reproducción desde ese instante.
 
 | Ruta | Usuarios | Contenido |
 |---|---|---|
-| `#/cuellos` | Coordinación, analistas | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola), mapa etapa × hora, desglose de ayudas diagnósticas, cortes por triage/demanda/edad, carga vs capacidad y hallazgo en texto |
-| `#/ans` | Coordinación, analistas | Cumplimiento por indicador (normativo, operativo, contractual), metas configurables y tendencia diaria |
-| `#/operacion` | Medicina, enfermería, admisiones | Generar turno, escáner QR, tablero con alertas, bitácora |
-| `#/coordinacion` | Coordinación, analistas | KPIs, tiempos por etapa, cuello de botella, demanda, capacidad, umbrales y metas |
-| `#/trazabilidad` | Coordinación, analistas | Episodio de extremo a extremo y casos de demostración |
+| `#/resumen` | Coordinación, analistas | Hallazgo principal, indicadores clave, etapas con más espera, ANS con meta |
+| `#/etapas` | Coordinación, analistas | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola) y espera/atención por etapa |
+| `#/horarios` | Coordinación, analistas | Mapa etapa × hora y demanda frente a capacidad |
+| `#/perfiles` | Coordinación, analistas | Cortes por triage, tipo de demanda y grupo de edad |
+| `#/ayudas` | Coordinación, analistas | Pasos de las ayudas diagnósticas y órdenes detenidas |
+| `#/ans` | Coordinación, analistas | Cumplimiento por indicador (normativo, operativo, contractual) y tendencia diaria |
+| `#/pacientes` | Medicina, enfermería, coordinación | Tablero de episodios activos con alertas |
+| `#/registro` | Medicina, enfermería, coordinación | Generar turno, escáner QR (con cámara) y bitácora |
+| `#/trazabilidad` | Medicina, enfermería, coordinación | Episodio de extremo a extremo y casos de demostración |
+| `#/configuracion` | Coordinación | Umbrales de alerta, metas de triage y metas operativas de ANS |
 | `#/acompanantes` | Acompañantes | Consulta móvil del turno propio con código de turno + código de verificación del tiquete (visible en Trazabilidad); no lista otros pacientes ni datos clínicos |
 
 ## Estructura
@@ -211,7 +221,7 @@ Organización por funcionalidades con componentes contenedores (páginas) y de p
 src/app/
   core/       modelos, catálogos, carga de la base sintética, dominio (flujo, indicadores), servicios (reloj, store)
   shared/     componentes de presentación y pipes reutilizables
-  features/   operacion/, coordinacion/, trazabilidad/, acompanantes/ (página + components/)
+  features/   analisis/, ans/, operacion/, trazabilidad/, configuracion/, acompanantes/ (páginas + components/)
 scripts/      convertir_dataset.py: Excel UNAL–Kantera → public/datos/urgentia360.json
 src/theme/    paleta de Angular Material generada desde los colores Keralty
 ```

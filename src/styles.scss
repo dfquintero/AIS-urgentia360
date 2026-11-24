@@ -266,3 +266,26 @@ mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
   position: absolute; inset: 18%; border: 3px solid var(--k-verde); border-radius: 12px;
   box-shadow: 0 0 0 999px rgb(0 0 0 / 35%);
 }
+
+// Pestañas por tema: encabezado compacto, filtros compartidos y resumen
+.barra { flex-wrap: nowrap; }
+.boton-icono.mat-mdc-outlined-button { min-width: 40px; padding: 0 10px; }
+.menu-titulo { padding: 8px 16px 2px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-suave); }
+.aviso-compacto { font-size: 0.85rem; padding: 8px 14px; }
+.enlace-boton { background: none; border: 0; padding: 0 0 0 6px; color: var(--k-azul-sec); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; }
+.pie-insignias { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.pie .fuente-datos { background: #e9eef5; color: var(--k-azul-oscuro); }
+.pie .red-cifrada { background: #e9eef5; color: var(--k-azul-oscuro); }
+.filtros-analisis {
+  position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  padding: 10px 12px; background: rgb(255 255 255 / 92%); backdrop-filter: blur(6px);
+  border: 1px solid var(--borde); border-radius: 12px;
+}
+.grid-resumen { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) { .grid-resumen { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.resumen-cuello .enlace { margin-left: 6px; }
+@media (max-width: 720px) {
+  .barra { flex-wrap: wrap; }
+  .marca-nombre { font-size: 1rem; }
+}
+.tabla-compacta.tabla-simple { min-width: 0; }
