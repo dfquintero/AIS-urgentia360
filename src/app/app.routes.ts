@@ -30,6 +30,11 @@ export const routes: Routes = [
     title: 'Urgentia 360 · Trazabilidad operativa de urgencias',
     loadComponent: () => import('./features/inicio/inicio.page').then((m) => m.InicioPage),
   },
+  {
+    path: 'vision',
+    title: 'Urgentia 360 · App conceptual de red',
+    loadComponent: () => import('./features/vision/vision.page').then((m) => m.VisionPage),
+  },
   analisis('resumen', 'Resumen', () => import('./features/analisis/resumen.page').then((m) => m.ResumenPage), false),
   analisis('etapas', 'Etapas', () => import('./features/analisis/etapas.page').then((m) => m.EtapasPage)),
   analisis('horarios', 'Horarios', () => import('./features/analisis/horarios.page').then((m) => m.HorariosPage)),

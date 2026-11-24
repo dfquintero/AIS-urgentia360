@@ -231,6 +231,7 @@ de seguir la reproducción desde ese instante.
 | Ruta | Usuarios | Contenido |
 |---|---|---|
 | `#/inicio` | Todos | Página de inicio: características, recorrido, presentación (carrusel con pantalla completa) y entrada por rol |
+| `#/vision` | Todos | App conceptual en un marco de celular (escenario hipotético): centros ficticios en Bogotá con tiempo en carro, perfil local (`localStorage`), prediagnóstico orientativo y recorrido con espera estimada |
 | `#/resumen` | Coordinación, analistas | Hallazgo principal, indicadores clave, etapas con más espera, ANS con meta |
 | `#/etapas` | Coordinación, analistas | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola) y espera/atención por etapa |
 | `#/horarios` | Coordinación, analistas | Mapa etapa × hora y demanda frente a capacidad |
@@ -251,7 +252,7 @@ Organización por funcionalidades con componentes contenedores (páginas) y de p
 src/app/
   core/       modelos, catálogos, carga de la base sintética, dominio (flujo, indicadores), servicios (reloj, store)
   shared/     componentes de presentación y pipes reutilizables
-  features/   inicio/, analisis/, ans/, operacion/, trazabilidad/, configuracion/, acompanantes/ (páginas + components/)
+  features/   inicio/, vision/, analisis/, ans/, operacion/, trazabilidad/, configuracion/, acompanantes/ (páginas + components/)
 scripts/      convertir_dataset.py: Excel UNAL–Kantera → public/datos/urgentia360.json
 src/theme/    paleta de Angular Material generada desde los colores Keralty
 ```
