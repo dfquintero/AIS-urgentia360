@@ -25,7 +25,7 @@ export interface RespuestasPrediagnostico {
         }
       </fieldset>
       @if (hayAlarma()) {
-        <a class="app-emergencia" href="tel:123"><Llama ya a la línea de emergencias 123</a>
+        <a class="app-emergencia" href="tel:123">Llama ya a la línea de emergencias 123</a>
       }
       <label>Síntoma principal
         <select name="sintoma" [(ngModel)]="sintoma">

@@ -14,7 +14,7 @@ const LETRAS = 'ABCDEFGHIJ';
       <h2 class="app-titulo">No siempre el punto más cercano es el más oportuno.</h2>
       <p class="app-prioridad" [class]="'app-prioridad app-prioridad-' + p">Prioridad orientativa: <strong>{{ etiqueta[p] }}</strong></p>
       @if (p === 'vital') {
-        <a class="app-emergencia" href="tel:123"><Llama a la línea 123: una ambulancia puede ser más segura que ir por tus medios.</a>
+        <a class="app-emergencia" href="tel:123">Llama a la línea 123: una ambulancia puede ser más segura que ir por tus medios.</a>
       }
       <div class="app-tabla" role="table" aria-label="Comparación de alternativas">
         <div class="app-tabla-fila app-tabla-encabezado" role="row">
