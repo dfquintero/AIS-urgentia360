@@ -1,0 +1,63 @@
+<div class="landing">
+  <nav class="landing-nav" aria-label="Navegación">
+    <a class="landing-logo" routerLink="/inicio"><span class="marca-simbolo" aria-hidden="true">+</span> Urgentia 360</a>
+    <a class="landing-secundario landing-cta-sm" routerLink="/inicio">← Volver al inicio</a>
+  </nav>
+
+  <section class="vision-app">
+    <div class="vision-texto">
+      <span class="landing-kicker">Visión · app conceptual</span>
+      <h1>Llegar al lugar <span class="landing-degradado">oportuno</span>, no solo al más cercano.</h1>
+      <p class="landing-lead">
+        Un mockup de cómo una app para pacientes podría usar señales de una red de atención: tiempo en carro, espera
+        estimada y un prediagnóstico orientativo para sugerir un recorrido.
+      </p>
+      <ul class="vision-puntos">
+        <li><strong>Geolocalización:</strong> tiempo estimado en carro a centros de una red simulada en Bogotá.</li>
+        <li><strong>Perfil local:</strong> información médica relevante guardada solo en el dispositivo.</li>
+        <li><strong>Prediagnóstico orientativo:</strong> señales de alarma y prioridad sugerida; nunca reemplaza el triage.</li>
+        <li><strong>Recorrido:</strong> desplazamiento + espera estimada, con la hora prevista de valoración.</li>
+      </ul>
+      <p class="landing-nota">
+        Escenario hipotético. Centros, nombres, posiciones, cargas y tiempos son ficticios y aleatorios; no son sedes
+        reales de Keralty ni de ninguna institución. La app no toma decisiones clínicas.
+      </p>
+    </div>
+
+    <div class="movil-marco" aria-label="Mockup de la app en un celular">
+      <div class="movil-isla" aria-hidden="true"></div>
+      <div class="movil-estado-barra" aria-hidden="true"><span>{{ horaVisible }}</span><span>▮▮▮ ◔</span></div>
+      <div class="movil-app">
+        @switch (pantalla()) {
+          @case ('cerca') {
+            <app-pantalla-cerca [centros]="centros" [origen]="origen()" [fuente]="fuente()" [(hora)]="hora" (ubicar)="ubicar()" (mover)="mover($event)" />
+          }
+          @case ('perfil') {
+            <app-pantalla-perfil />
+          }
+          @case ('prediagnostico') {
+            <app-pantalla-prediagnostico [perfil]="perfil()" (generar)="generar($event)" />
+          }
+          @case ('recorrido') {
+            <app-pantalla-recorrido
+              [centros]="centros"
+              [origen]="origen()"
+              [alternativas]="alternativas()"
+              [prioridad]="prioridad()"
+              [perfil]="perfil()"
+              [salida]="salida()"
+              (irAPrediagnostico)="pantalla.set('prediagnostico')"
+            />
+          }
+        }
+      </div>
+      <nav class="movil-tabs" aria-label="Pantallas de la app">
+        @for (t of pestanas; track t.id) {
+          <button type="button" [class.activa]="pantalla() === t.id" [attr.aria-current]="pantalla() === t.id ? 'page' : null" (click)="pantalla.set(t.id)">
+            <span aria-hidden="true">{{ t.icono }}</span>{{ t.texto }}
+          </button>
+        }
+      </nav>
+    </div>
+  </section>
+</div>

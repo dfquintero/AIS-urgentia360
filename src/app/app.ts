@@ -117,11 +117,11 @@ export class App {
     ),
     { initialValue: this.router.url },
   );
-  protected readonly esInicio = computed(() => this.url().startsWith('/inicio'));
+  protected readonly esInicio = computed(() => /^\/(inicio|vision)\b/.test(this.url()));
   private pausaAntesDeInicio: boolean | null = null;
 
   constructor() {
-    // La reproducción no avanza mientras se ve la página de inicio; al entrar se restaura el estado anterior.
+    // La reproducción no avanza mientras se ven las páginas públicas (inicio y visión); al entrar se restaura el estado anterior.
     effect(() => {
       const inicio = this.esInicio();
       untracked(() => {

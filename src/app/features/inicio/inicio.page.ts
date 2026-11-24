@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ETAPAS } from '../../core/data/catalogos';
 import { PERFILES, RolService, RolUsuario } from '../../core/services/rol.service';
 import { CarruselDiapositivas } from './components/carrusel-diapositivas';
@@ -79,7 +79,7 @@ const PASOS = [
 
 @Component({
   selector: 'app-inicio-page',
-  imports: [CarruselDiapositivas],
+  imports: [RouterLink, CarruselDiapositivas],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './inicio.page.html',
 })
