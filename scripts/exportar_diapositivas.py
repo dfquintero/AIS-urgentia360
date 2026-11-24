@@ -39,7 +39,7 @@ def textos(pptx: Path) -> list[str]:
         resultado = []
         for n in nombres:
             # Los saltos de línea dentro de un párrafo separan elementos («Ayudas<br/>diagnósticas», listas).
-            xml = re.sub(r'<a:br\s*/>', '<a:t> </a:t>', z.read(n).decode('utf8'))
+            xml = re.sub(r'(?s)<a:br\b[^>]*?(?:/>|>.*?</a:br>)', '<a:t> </a:t>', z.read(n).decode('utf8'))
             parrafos = (''.join(re.findall(r'<a:t>(.*?)</a:t>', p)) for p in re.findall(r'<a:p>(.*?)</a:p>', xml, re.S))
             limpios = (unescape(p).strip() for p in parrafos)
             # Se descartan los nombres de iconos (ligaduras de Material Icons como «schedule» o «error_outline»).

@@ -12,7 +12,7 @@
  {
   "archivo": "03.webp",
   "mini": "03-mini.webp",
-  "texto": "Del turno al egreso. · El recorrido puede incluir ciclos y rutas alternativas según la atención requerida. · 00 · Turno · 01 · Triage · 02 · Admisión · 03 · Consulta · 04 · Ayudasdiagnósticas · 05 · Valoración · 06 · Egreso · RUTAS / CICLOS · Laboratorio  ·  Imágenes  ·  Observación  ·  Revaloración  ·  Retorno a consulta"
+  "texto": "Del turno al egreso. · El recorrido puede incluir ciclos y rutas alternativas según la atención requerida. · 00 · Turno · 01 · Triage · 02 · Admisión · 03 · Consulta · 04 · Ayudas diagnósticas · 05 · Valoración · 06 · Egreso · RUTAS / CICLOS · Laboratorio  ·  Imágenes  ·  Observación  ·  Revaloración  ·  Retorno a consulta"
  },
  {
   "archivo": "04.webp",
@@ -22,17 +22,17 @@
  {
   "archivo": "05.webp",
   "mini": "05-mini.webp",
-  "texto": "Cada etapa deja una marca. · El personal autorizado registra el ingreso y la salida de un área mediante el escaneo del QR. · FLOW MOBILE · Escaneo registrado · Área: Consulta · DATOS DEL EVENTO · • ID ficticio del episodio• Etapa / área• Inicio y fin• Fuente del registro• Responsable autorizado• Estado y hora de actualización · RESULTADO · Una línea de tiempo consistente para medir permanencias, transiciones y posibles demoras entre etapas."
+  "texto": "Cada etapa deja una marca. · El personal autorizado registra el ingreso y la salida de un área mediante el escaneo del QR. · FLOW MOBILE · Escaneo registrado · Área: Consulta · DATOS DEL EVENTO · • ID ficticio del episodio • Etapa / área • Inicio y fin • Fuente del registro • Responsable autorizado • Estado y hora de actualización · RESULTADO · Una línea de tiempo consistente para medir permanencias, transiciones y posibles demoras entre etapas."
  },
  {
   "archivo": "06.webp",
   "mini": "06-mini.webp",
-  "texto": "Una infraestructura. Dos componentes. · Diseño conceptual para operar en la red interna institucional, sujeto a revisión de ciberseguridad y TI. · APLICACIÓN MÓVIL · Escaneo · Captura · Envío · SERVIDOR CENTRAL · API / validaciónProcesamientoBase de datos · DASHBOARDS · Indicadores · Alertas · Seguridad: cifrado en tránsito, autenticación, autorización, registro de auditoría y mínimo privilegio."
+  "texto": "Una infraestructura. Dos componentes. · Diseño conceptual para operar en la red interna institucional, sujeto a revisión de ciberseguridad y TI. · APLICACIÓN MÓVIL · Escaneo · Captura · Envío · SERVIDOR CENTRAL · API / validación Procesamiento Base de datos · DASHBOARDS · Indicadores · Alertas · Seguridad: cifrado en tránsito, autenticación, autorización, registro de auditoría y mínimo privilegio."
  },
  {
   "archivo": "07.webp",
   "mini": "07-mini.webp",
-  "texto": "07 / VISTAS DEL SISTEMA · La información correcta para cada rol. · Tres niveles de visualización, con acceso limitado según funciones y permisos. · 01 · OPERACIÓN DE URGENCIAS · Pacientes en procesoEtapa actual y eventosAlertas de esperaPendientes de actualización · 02 · COORDINACIÓN · Tiempos por etapaVolumen y tendenciasCuellos de botellaComparación por servicio · 03 · ACOMPAÑANTES · Vista demostrativa limitadaEstado general autorizadoSin datos clínicos sensiblesSin revelar información de terceros · FLOW  |  PROPUESTA CONCEPTUAL"
+  "texto": "07 / VISTAS DEL SISTEMA · La información correcta para cada rol. · Tres niveles de visualización, con acceso limitado según funciones y permisos. · 01 · OPERACIÓN DE URGENCIAS · Pacientes en proceso Etapa actual y eventos Alertas de espera Pendientes de actualización · 02 · COORDINACIÓN · Tiempos por etapa Volumen y tendencias Cuellos de botella Comparación por servicio · 03 · ACOMPAÑANTES · Vista demostrativa limitada Estado general autorizado Sin datos clínicos sensibles Sin revelar información de terceros · FLOW  |  PROPUESTA CONCEPTUAL"
  },
  {
   "archivo": "08.webp",
@@ -42,7 +42,7 @@
  {
   "archivo": "09.webp",
   "mini": "09-mini.webp",
-  "texto": "Visibilidad para entender. Información para decidir. · complementa los sistemas existentes con una lectura operativa del proceso. · NO REEMPLAZA · Sistemas clínicosCriterio profesionalProtocolos de triage · → · SÍ APORTA · Trazabilidad operativaIndicadores oportunosDetección de cuellos de botella"
+  "texto": "Visibilidad para entender. Información para decidir. · complementa los sistemas existentes con una lectura operativa del proceso. · NO REEMPLAZA · Sistemas clínicos Criterio profesional Protocolos de triage · → · SÍ APORTA · Trazabilidad operativa Indicadores oportunos Detección de cuellos de botella"
  },
  {
   "archivo": "10.webp",
