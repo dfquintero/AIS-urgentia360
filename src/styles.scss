@@ -428,9 +428,13 @@ a.barra-marca { color: inherit; text-decoration: none; }
 .landing-vision-texto p { margin: 0; color: #c9d4e5; line-height: 1.6; }
 
 .landing-equipo { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-// Sistemas: azul a índigo; Industrial: ámbar a naranja. Colores oscuros para que el texto blanco tenga contraste ≥ 4.5:1.
-.landing-sistemas { --a1: #1d4ed8; --a2: #4338ca; --tono: #8fb4ff; }
-.landing-industrial { --a1: #b45309; --a2: #c2410c; --tono: #ffc27a; }
+// Un color por integrante; tonos oscuros para que las iniciales blancas tengan contraste ≥ 4.5:1. El icono indica la carrera.
+.landing-leyenda .landing-area { --a1: #334155; --tono: #d3dcea; }
+.landing-miembro:nth-child(5n + 1) { --a1: #1d4ed8; --a2: #3730a3; --tono: #8fb4ff; }
+.landing-miembro:nth-child(5n + 2) { --a1: #047857; --a2: #065f46; --tono: #5eead4; }
+.landing-miembro:nth-child(5n + 3) { --a1: #6d28d9; --a2: #5b21b6; --tono: #c4a5ff; }
+.landing-miembro:nth-child(5n + 4) { --a1: #b45309; --a2: #9a3412; --tono: #ffc27a; }
+.landing-miembro:nth-child(5n + 5) { --a1: #be185d; --a2: #9d174d; --tono: #ff9cc6; }
 .landing-leyenda { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 0; }
 .landing-area {
   display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 8px; border-radius: 999px;
