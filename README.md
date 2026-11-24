@@ -117,6 +117,25 @@ no es de confianza: acepte continuar (solo para la demo) y conceda el permiso de
 
 ---
 
+### 7. Página de inicio y presentación
+
+Al abrir la app se muestra la página de inicio (`#/inicio`): portada, capturas del prototipo en marcos de
+escritorio y celular, módulos principales, cómo funciona, la
+presentación en un carrusel con **pantalla completa** (flechas del teclado, deslizar en el celular, `Esc` para salir)
+y botones para entrar con cada rol simulado. El logo de la barra superior vuelve a esta página.
+
+Las diapositivas son imágenes WebP exportadas de `presentacion/keralty_presentacion.pptx`. Si la presentación
+cambia, se regeneran con (requiere LibreOffice, `poppler-utils` y Pillow; la diapositiva 1 se omite):
+
+```bash
+python scripts/exportar_diapositivas.py --omitir 1
+```
+
+Las imágenes de la página están en `public/landing/`: capturas del prototipo e ilustraciones generadas con IA
+(`hero`, `qr`, `red`).
+
+---
+
 ## Recorrido sugerido para una demostración
 
 La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes del corte de la simulación) a 10×.
@@ -201,6 +220,7 @@ de seguir la reproducción desde ese instante.
 
 | Ruta | Usuarios | Contenido |
 |---|---|---|
+| `#/inicio` | Todos | Página de inicio: características, recorrido, presentación (carrusel con pantalla completa) y entrada por rol |
 | `#/resumen` | Coordinación, analistas | Hallazgo principal, indicadores clave, etapas con más espera, ANS con meta |
 | `#/etapas` | Coordinación, analistas | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola) y espera/atención por etapa |
 | `#/horarios` | Coordinación, analistas | Mapa etapa × hora y demanda frente a capacidad |
@@ -221,7 +241,7 @@ Organización por funcionalidades con componentes contenedores (páginas) y de p
 src/app/
   core/       modelos, catálogos, carga de la base sintética, dominio (flujo, indicadores), servicios (reloj, store)
   shared/     componentes de presentación y pipes reutilizables
-  features/   analisis/, ans/, operacion/, trazabilidad/, configuracion/, acompanantes/ (páginas + components/)
+  features/   inicio/, analisis/, ans/, operacion/, trazabilidad/, configuracion/, acompanantes/ (páginas + components/)
 scripts/      convertir_dataset.py: Excel UNAL–Kantera → public/datos/urgentia360.json
 src/theme/    paleta de Angular Material generada desde los colores Keralty
 ```

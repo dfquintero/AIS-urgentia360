@@ -1,0 +1,154 @@
+<div class="landing">
+  <nav class="landing-nav" aria-label="Secciones">
+    <span class="landing-logo"><span class="marca-simbolo" aria-hidden="true">+</span> Urgentia 360</span>
+    <div class="landing-enlaces">
+      <button type="button" (click)="ir('producto')">Producto</button>
+      <button type="button" (click)="ir('como-funciona')">Cómo funciona</button>
+      <button type="button" (click)="ir('presentacion')">Presentación</button>
+      <button type="button" (click)="ir('roles')">Roles</button>
+    </div>
+    <button type="button" class="landing-cta landing-cta-sm" (click)="entrar('demo')">Entrar al prototipo</button>
+  </nav>
+
+  <header class="landing-hero">
+    <div class="landing-hero-texto">
+      <span class="landing-pildora"><span class="landing-punto"></span> Prototipo académico · UNAL × Kantera · 2026</span>
+      <h1>Hacer visible lo <span class="landing-degradado">invisible</span> en urgencias.</h1>
+      <p class="landing-lead">
+        Trazabilidad operativa del turno al egreso para identificar cuellos de botella, seguir los tiempos de atención
+        y apoyar la gestión de ANS.
+      </p>
+      <div class="landing-acciones">
+        <button type="button" class="landing-cta" (click)="entrar('demo')">Entrar al prototipo →</button>
+        <button type="button" class="landing-secundario" (click)="ir('presentacion')">Ver presentación</button>
+      </div>
+      <p class="landing-nota">Datos 100 % sintéticos · no toma decisiones clínicas · el triage siempre lo realiza el profesional.</p>
+    </div>
+    <div class="landing-hero-visual">
+      <div class="landing-brillo" aria-hidden="true"></div>
+      <img [src]="img + 'hero.webp'" alt="Ilustración isométrica de un servicio de urgencias conectado por flujos de datos" width="1536" height="1024" fetchpriority="high" />
+      <div class="landing-flotante landing-flotante-a" aria-hidden="true">
+        <span class="landing-flotante-etiqueta">Mayor espera · p90</span>
+        <strong>3 h 20 min</strong>
+        <span>Definición de conducta</span>
+      </div>
+      <div class="landing-flotante landing-flotante-b" aria-hidden="true">
+        <span class="landing-flotante-etiqueta">Triage II ≤ 30 min</span>
+        <strong>57,4 %</strong>
+        <span class="landing-barra"><span style="width: 57%"></span></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="landing-cifras" aria-label="Cifras de la base sintética">
+    @for (c of cifras; track c.etiqueta) {
+      <div>
+        <strong class="landing-degradado">{{ c.valor }}</strong>
+        <span>{{ c.etiqueta }}</span>
+      </div>
+    }
+  </section>
+
+  <section class="landing-seccion landing-vitrina" id="producto">
+    <span class="landing-kicker">El producto</span>
+    <h2>Una vista común para toda la operación.</h2>
+    <p class="landing-sub">Coordinación, personal asistencial, analistas y acompañantes ven la información que necesitan, en el escritorio o en el celular.</p>
+    <div class="landing-dispositivos">
+      <figure class="landing-laptop">
+        <div class="landing-laptop-pantalla">
+          <img [src]="img + 'app-resumen.webp'" alt="Pestaña Resumen: hallazgo principal, indicadores, etapas con más espera y ANS" width="1440" height="900" loading="lazy" />
+        </div>
+        <div class="landing-laptop-base" aria-hidden="true"></div>
+      </figure>
+      <figure class="landing-telefono landing-telefono-vitrina">
+        <img [src]="img + 'movil-registro.webp'" alt="Registro QR en el celular" width="390" height="844" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  @for (m of modulos; track m.etiqueta; let par = $even) {
+    <section class="landing-seccion landing-modulo" [class.landing-invertido]="!par">
+      <div class="landing-modulo-texto">
+        <span class="landing-kicker">{{ m.etiqueta }}</span>
+        <h2>{{ m.titulo }}</h2>
+        <p>{{ m.texto }}</p>
+        <ul class="landing-chips">
+          @for (p of m.puntos; track p) { <li>{{ p }}</li> }
+        </ul>
+      </div>
+      <div class="landing-modulo-visual">
+        @switch (m.tipo) {
+          @case ('pantalla') {
+            <div class="landing-ventana">
+              <div class="landing-ventana-barra" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img [src]="img + m.imagen" [alt]="m.alt" width="1440" height="900" loading="lazy" />
+            </div>
+          }
+          @case ('movil') {
+            <figure class="landing-telefono"><img [src]="img + m.imagen" [alt]="m.alt" width="390" height="844" loading="lazy" /></figure>
+          }
+          @default {
+            <img class="landing-foto" [src]="img + m.imagen" [alt]="m.alt" width="900" height="900" loading="lazy" />
+          }
+        }
+      </div>
+    </section>
+  }
+
+  <section class="landing-seccion" id="como-funciona">
+    <span class="landing-kicker">Cómo funciona</span>
+    <h2>De la actividad dispersa a información útil.</h2>
+    <div class="landing-pasos">
+      @for (p of pasos; track p.titulo; let i = $index) {
+        <article class="landing-paso">
+          <span class="landing-paso-numero">0{{ i + 1 }}</span>
+          <h3>{{ p.titulo }}</h3>
+          <p>{{ p.texto }}</p>
+        </article>
+      }
+    </div>
+    <ol class="landing-flujo" aria-label="Etapas del recorrido">
+      @for (e of etapas; track e.id) {
+        <li [class.landing-obligatoria]="e.obligatoria">{{ e.corto }}</li>
+      }
+    </ol>
+  </section>
+
+  <section class="landing-seccion" id="presentacion">
+    <span class="landing-kicker">Presentación</span>
+    <h2>La propuesta en 17 diapositivas.</h2>
+    <app-carrusel-diapositivas />
+  </section>
+
+  <section class="landing-vision" [style.background-image]="'url(' + img + 'red.webp)'">
+    <div class="landing-vision-texto">
+      <span class="landing-kicker">Visión</span>
+      <h2>Del hospital a la red de atención.</h2>
+      <p>Una posible evolución: conectar señales operativas de varias instituciones para comprender la red. Escenario hipotético que requeriría reglas clínicas, operativas y regulatorias definidas por las instituciones.</p>
+    </div>
+  </section>
+
+  <section class="landing-seccion" id="roles">
+    <span class="landing-kicker">Pruébalo</span>
+    <h2>Entra con el rol que quieras explorar.</h2>
+    <p class="landing-sub">Rol simulado, sin autenticación real: solo cambia las pestañas visibles.</p>
+    <div class="landing-roles">
+      @for (p of perfiles; track p.id) {
+        <button type="button" class="landing-rol" (click)="entrar(p.id)">
+          <strong>{{ p.nombre }}</strong>
+          <span>{{ p.descripcion }}</span>
+          <span class="landing-rol-flecha" aria-hidden="true">→</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <footer class="landing-pie">
+    <span class="landing-logo"><span class="marca-simbolo" aria-hidden="true">+</span> Urgentia 360</span>
+    <p>
+      Proyecto académico (UNAL) sin afiliación oficial con Keralty. Herramienta de apoyo operativo: no toma decisiones
+      clínicas ni debe usarse para negar o retrasar la atención (Resolución 5596 de 2015). Datos 100 % sintéticos de la base
+      UNAL–Kantera, sede ficticia SEDE-DEMO-01. Ilustraciones generadas con IA; capturas del prototipo.
+    </p>
+  </footer>
+</div>
