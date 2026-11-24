@@ -1,0 +1,87 @@
+[
+ {
+  "archivo": "01.webp",
+  "mini": "01-mini.webp",
+  "texto": "¿Qué sucede mientras un paciente espera? · En urgencias participan distintas etapas, áreas y profesionales. La operación necesita una vista común. · 01 · TURNO · Registro · 02 · TRIAGE · Clasificación · 03 · CONSULTA · Atención · 04 · APOYOS · Diagnóstico · 05 · EGRESO · Salida · Cuando los eventos no se conectan, cuesta responder: · ¿Dónde se acumulan pacientes? · ¿Cuánto tarda cada etapa? · ¿Qué requiere atención operativa?"
+ },
+ {
+  "archivo": "02.webp",
+  "mini": "02-mini.webp",
+  "texto": "Una visión operativa del recorrido. · organiza eventos del proceso para convertir actividad dispersa en información útil. · 01 · TRAZABILIDAD · Registrar cuándo y dónde ocurre cada evento. · 02 · MONITOREO · Visualizar estados, esperas y alertas configurables. · 03 · DECISIÓN · Entregar indicadores para orientar mejoras operativas."
+ },
+ {
+  "archivo": "03.webp",
+  "mini": "03-mini.webp",
+  "texto": "Del turno al egreso. · El recorrido puede incluir ciclos y rutas alternativas según la atención requerida. · 00 · Turno · 01 · Triage · 02 · Admisión · 03 · Consulta · 04 · Ayudasdiagnósticas · 05 · Valoración · 06 · Egreso · RUTAS / CICLOS · Laboratorio  ·  Imágenes  ·  Observación  ·  Revaloración  ·  Retorno a consulta"
+ },
+ {
+  "archivo": "04.webp",
+  "mini": "04-mini.webp",
+  "texto": "Todo comienza con un identificador operativo. · Se plantea integrar el registro de Digiturno —sujeto a validación técnica— con un identificador del episodio. · 01  DIGITURNO · Origen potencial del evento de generación de turno. La interfaz disponible debe confirmarse con TI. · 02  IDENTIFICADOR · Código único y no clínico para enlazar los eventos del mismo episodio. · 03  QR · Puede imprimirse en tiquete, manilla o documentación de seguimiento. · El punto cero inicia el seguimiento operativo; no marca por sí mismo el inicio de una obligación clínica o contractual."
+ },
+ {
+  "archivo": "05.webp",
+  "mini": "05-mini.webp",
+  "texto": "Cada etapa deja una marca. · El personal autorizado registra el ingreso y la salida de un área mediante el escaneo del QR. · FLOW MOBILE · Escaneo registrado · Área: Consulta · DATOS DEL EVENTO · • ID ficticio del episodio• Etapa / área• Inicio y fin• Fuente del registro• Responsable autorizado• Estado y hora de actualización · RESULTADO · Una línea de tiempo consistente para medir permanencias, transiciones y posibles demoras entre etapas."
+ },
+ {
+  "archivo": "06.webp",
+  "mini": "06-mini.webp",
+  "texto": "Una infraestructura. Dos componentes. · Diseño conceptual para operar en la red interna institucional, sujeto a revisión de ciberseguridad y TI. · APLICACIÓN MÓVIL · Escaneo · Captura · Envío · SERVIDOR CENTRAL · API / validaciónProcesamientoBase de datos · DASHBOARDS · Indicadores · Alertas · Seguridad: cifrado en tránsito, autenticación, autorización, registro de auditoría y mínimo privilegio."
+ },
+ {
+  "archivo": "07.webp",
+  "mini": "07-mini.webp",
+  "texto": "07 / VISTAS DEL SISTEMA · La información correcta para cada rol. · Tres niveles de visualización, con acceso limitado según funciones y permisos. · 01 · OPERACIÓN DE URGENCIAS · Pacientes en procesoEtapa actual y eventosAlertas de esperaPendientes de actualización · 02 · COORDINACIÓN · Tiempos por etapaVolumen y tendenciasCuellos de botellaComparación por servicio · 03 · ACOMPAÑANTES · Vista demostrativa limitadaEstado general autorizadoSin datos clínicos sensiblesSin revelar información de terceros · FLOW  |  PROPUESTA CONCEPTUAL"
+ },
+ {
+  "archivo": "08.webp",
+  "mini": "08-mini.webp",
+  "texto": "Detectar antes de que se convierta en un problema. · Las alertas orientan la revisión operativa; no sustituyen el juicio clínico ni el triage. · ESPERA EN CONSULTA · 45 min · PACIENTES EN IMÁGENES · 08 · EVENTOS SIN CIERRE · 03 · FLOW no prioriza, clasifica ni niega la atención. El triage es obligatorio y las decisiones clínicas corresponden al personal autorizado."
+ },
+ {
+  "archivo": "09.webp",
+  "mini": "09-mini.webp",
+  "texto": "Visibilidad para entender. Información para decidir. · complementa los sistemas existentes con una lectura operativa del proceso. · NO REEMPLAZA · Sistemas clínicosCriterio profesionalProtocolos de triage · → · SÍ APORTA · Trazabilidad operativaIndicadores oportunosDetección de cuellos de botella"
+ },
+ {
+  "archivo": "10.webp",
+  "mini": "10-mini.webp",
+  "texto": "De la propuesta a un piloto controlado. · El siguiente paso es confirmar procesos, datos, integraciones y responsabilidades con Keralty. · 01 · Descubrimiento · Mapear flujo real y responsables. · 02 · Validación TI · Digiturno, red, API y seguridad. · 03 · Prototipo · QR, captura de eventos y dashboards. · 04 · Piloto · Medir calidad del dato y utilidad operativa."
+ },
+ {
+  "archivo": "11.webp",
+  "mini": "11-mini.webp",
+  "texto": "Hacer visible lo invisible. · Inteligencia operativa para urgencias"
+ },
+ {
+  "archivo": "12.webp",
+  "mini": "12-mini.webp",
+  "texto": "... And one more thing."
+ },
+ {
+  "archivo": "13.webp",
+  "mini": "13-mini.webp",
+  "texto": "¿Y si la visibilidad no terminara en un solo hospital? · Una posible evolución: conectar señales operativas de varias instituciones para comprender la red. · H · H · H · H · Pgb"
+ },
+ {
+  "archivo": "14.webp",
+  "mini": "14-mini.webp",
+  "texto": "Del seguimiento interno a la inteligencia de red. · Explorar alternativas de atención con datos operativos actualizados y criterios institucionales. · 01 · UBICACIÓN · Punto de partida y tiempo estimado de desplazamiento. · 02 · CAPACIDAD · Disponibilidad de servicios, capacidad y ocupación reportada. · 03 · ESTIMACIÓN · Comparación orientativa del tiempo total estimado. · Tiempo total estimado = desplazamiento + espera estimada"
+ },
+ {
+  "archivo": "15.webp",
+  "mini": "15-mini.webp",
+  "texto": "No siempre el punto más cercano es el más oportuno. · Escenario hipotético para demostrar el concepto. No representa tiempos reales ni recomienda una institución. · Alternativa · Desplazamiento · Espera estimada · Total estimado · Clínica A · 10 min · 120 min · 130 min · Clínica B · 20 min · 35 min · 55 min · Clínica C · 15 min · 75 min · 90 min · La alternativa B presenta el menor total estimado en este ejemplo."
+ },
+ {
+  "archivo": "16.webp",
+  "mini": "16-mini.webp",
+  "texto": "La eficiencia nunca está por encima de la atención segura. · La evolución requeriría reglas clínicas, operativas y regulatorias definidas por las instituciones. · Triage primero · Nunca retrasar atención urgente por una comparación de tiempos. · Capacidad real · Considerar servicios, especialidades y capacidad confirmada. · Derivación segura · Respetar redes, autorizaciones y rutas institucionales. · Información vigente · Mostrar hora de actualización y nivel de confiabilidad."
+ },
+ {
+  "archivo": "17.webp",
+  "mini": "17-mini.webp",
+  "texto": "From hospital visibility... · To healthcare network intelligence. · Una red de atención más conectada, informada y eficiente."
+ }
+]

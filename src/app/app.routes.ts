@@ -24,7 +24,12 @@ const analisis = (path: string, title: string, pagina: () => Promise<Type<unknow
 });
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: vistaInicial },
+  { path: '', pathMatch: 'full', redirectTo: 'inicio' },
+  {
+    path: 'inicio',
+    title: 'Urgentia 360 · Trazabilidad operativa de urgencias',
+    loadComponent: () => import('./features/inicio/inicio.page').then((m) => m.InicioPage),
+  },
   analisis('resumen', 'Resumen', () => import('./features/analisis/resumen.page').then((m) => m.ResumenPage), false),
   analisis('etapas', 'Etapas', () => import('./features/analisis/etapas.page').then((m) => m.EtapasPage)),
   analisis('horarios', 'Horarios', () => import('./features/analisis/horarios.page').then((m) => m.HorariosPage)),
