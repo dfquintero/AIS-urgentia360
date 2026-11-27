@@ -41,6 +41,8 @@ import { QrPaciente } from '../../../shared/ui/qr-paciente';
 })
 export class EscanerQr {
   readonly episodios = input.required<Episodio[]>();
+  /** Responsable registrado cuando no se elige uno (rol activo). */
+  readonly responsableSugerido = input<string | null>(null);
   readonly codigo = model('');
   readonly escanear = output<SolicitudEscaneo>();
 
@@ -92,7 +94,7 @@ export class EscanerQr {
 
   protected readonly puedeRegistrar = computed(() => {
     if (!this.episodio()) return false;
-    if (this.accion() === 'entrada') return !!this.responsable();
+    if (this.accion() === 'entrada') return !!(this.responsable() ?? this.responsableSugerido());
     if (this.pideTriage()) return !!this.triage();
     if (this.pideDestino()) return !!this.destino();
     return true;
@@ -110,7 +112,7 @@ export class EscanerQr {
   protected registrar(): void {
     this.escanear.emit({
       codigo: this.codigo(),
-      responsable: this.responsable(),
+      responsable: this.responsable() ?? this.responsableSugerido(),
       triage: this.triage(),
       destino: this.destino(),
       siguiente: this.siguiente() ?? undefined,
