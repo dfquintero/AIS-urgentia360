@@ -156,9 +156,9 @@ La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes
    | Rol | Vistas |
    |---|---|
    | Demostración | Las 11 pestañas |
-   | Médico / Enfermería | Pacientes, Registro QR, Trazabilidad |
+   | Recepción | Solo Registro QR: genera turno + QR con datos básicos, sin ver datos clínicos |
+   | Atención clínica | Pacientes, Registro QR, Trazabilidad |
    | Coordinación de urgencias | Todas menos Acompañantes (incluye Configuración) |
-   | Directivo / Analista | Resumen, Etapas, Horarios, Perfiles, Ayudas Dx, ANS (solo indicadores agregados) |
    | Acompañante | Acompañantes |
 1. **Controles del encabezado:** pausa (▶/❚❚) y el menú de velocidad (1× a 300×), que también tiene **Ir a…** para saltar al inicio del periodo, a un
    pico de demanda o al corte (15 oct, 00:00), donde quedan los 10 episodios abiertos de la base.
@@ -173,7 +173,7 @@ La reproducción arranca el **14 de octubre de 2026 a las 20:00** (4 horas antes
 3. **Operación:**
    1. **Pacientes** (`#/pacientes`): episodios activos con etapa, tiempo, órdenes pendientes y motivo de la alerta.
       Al seleccionar una fila se abre **Registro QR** con ese turno.
-   2. **Registro QR** (`#/registro`): **+ Generar turno (Punto 0)** crea un episodio en espera de triage con su QR.
+   2. **Registro QR** (`#/registro`): **Recibir paciente** toma datos básicos (motivo, grupo de edad, cómo llega, acompañante) y crea el episodio en espera de triage con su QR.
       Elegir un responsable (código ficticio) y **Registrar entrada**; para salir de Triage se exige la clasificación
       (I–V) que asigna el profesional. Desde la primera valoración se elige **ayudas diagnósticas** o **definir
       conducta**; el egreso exige el destino. La bitácora mezcla los eventos de la base con los registros manuales.
@@ -232,15 +232,15 @@ de seguir la reproducción desde ese instante.
 |---|---|---|
 | `#/inicio` | Todos | Página de inicio: características, recorrido, presentación (carrusel con pantalla completa) y entrada por rol |
 | `#/vision` | Todos | App conceptual en un marco de celular (escenario hipotético): centros ficticios en Bogotá con tiempo en carro, perfil local (`localStorage`), prediagnóstico orientativo y recorrido con espera estimada |
-| `#/resumen` | Coordinación, analistas | Hallazgo principal, indicadores clave, etapas con más espera, ANS con meta |
-| `#/etapas` | Coordinación, analistas | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola) y espera/atención por etapa |
-| `#/horarios` | Coordinación, analistas | Mapa etapa × hora y demanda frente a capacidad |
-| `#/perfiles` | Coordinación, analistas | Cortes por triage, tipo de demanda y grupo de edad |
-| `#/ayudas` | Coordinación, analistas | Pasos de las ayudas diagnósticas y órdenes detenidas |
-| `#/ans` | Coordinación, analistas | Cumplimiento por indicador (normativo, operativo, contractual) y tendencia diaria |
-| `#/pacientes` | Medicina, enfermería, coordinación | Tablero de episodios activos con alertas |
-| `#/registro` | Medicina, enfermería, coordinación | Generar turno, escáner QR (con cámara) y bitácora |
-| `#/trazabilidad` | Medicina, enfermería, coordinación | Episodio de extremo a extremo y casos de demostración |
+| `#/resumen` | Coordinación | Hallazgo principal, indicadores clave, etapas con más espera, ANS con meta |
+| `#/etapas` | Coordinación | **Objetivo principal:** ranking de etapas (promedio, mediana, p90, cola) y espera/atención por etapa |
+| `#/horarios` | Coordinación | Mapa etapa × hora y demanda frente a capacidad |
+| `#/perfiles` | Coordinación | Cortes por triage, tipo de demanda y grupo de edad |
+| `#/ayudas` | Coordinación | Pasos de las ayudas diagnósticas y órdenes detenidas |
+| `#/ans` | Coordinación | Cumplimiento por indicador (normativo, operativo, contractual) y tendencia diaria |
+| `#/pacientes` | Atención clínica, coordinación | Tablero de episodios activos con alertas |
+| `#/registro` | Recepción, atención clínica, coordinación | Recibir paciente (turno + QR), escáner QR (con cámara) y bitácora |
+| `#/trazabilidad` | Atención clínica, coordinación | Episodio de extremo a extremo y casos de demostración |
 | `#/configuracion` | Coordinación | Umbrales de alerta, metas de triage y metas operativas de ANS |
 | `#/acompanantes` | Acompañantes | Consulta móvil del turno propio con código de turno + código de verificación del tiquete (visible en Trazabilidad); no lista otros pacientes ni datos clínicos |
 

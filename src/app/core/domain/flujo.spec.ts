@@ -5,7 +5,7 @@ import { accionPendiente, crearEpisodioNuevo, etapaActual, nuevoRegistro, regist
 const T0 = 1_000_000;
 
 function enEtapa(etapa: EtapaId, enAtencion: boolean, extra: Partial<Episodio> = {}): Episodio {
-  const base = crearEpisodioNuevo(1, T0, 'General', '18-39');
+  const base = crearEpisodioNuevo(1, T0, { demanda: 'General', grupoEdad: '18-39', llegadaPor: 'A pie', conAcompanante: false });
   const registro = nuevoRegistro(etapa, T0, enAtencion ? { entrada: T0, responsable: 'MED-FICT-01' } : {});
   return { ...base, ...extra, historial: [registro] };
 }
@@ -18,7 +18,7 @@ function exito(r: ResultadoEscaneo) {
 describe('máquina de estados del flujo de urgencias', () => {
   it('un turno nuevo queda en espera de triage (Punto 0 solo conduce a Triage)', () => {
     expect(TRANSICIONES.punto0).toEqual(['triage']);
-    const nuevo = crearEpisodioNuevo(361, T0, 'Dolor', '65+');
+    const nuevo = crearEpisodioNuevo(361, T0, { demanda: 'Dolor', grupoEdad: '65+', llegadaPor: 'Ambulancia', conAcompanante: true });
     expect(nuevo.id).toBe('DEM-URG-00361');
     expect(etapaActual(nuevo)).toBe('triage');
     expect(accionPendiente(nuevo)).toBe('entrada');
@@ -62,9 +62,9 @@ describe('máquina de estados del flujo de urgencias', () => {
   it('el egreso exige destino y cierra el episodio', () => {
     const e = enEtapa('conducta', true, { triage: 'V' });
     expect(registrarEscaneo(e, { ahora: T0 + 9 }).ok).toBe(false);
-    const r = exito(registrarEscaneo(e, { ahora: T0 + 9, destino: 'Alta' }));
+    const r = exito(registrarEscaneo(e, { ahora: T0 + 9, destino: 'Alta a casa' }));
     expect(r.egresado).toBe(true);
     expect(r.episodio.egreso).toBe(T0 + 9);
-    expect(r.episodio.destino).toBe('Alta');
+    expect(r.episodio.destino).toBe('Alta a casa');
   });
 });

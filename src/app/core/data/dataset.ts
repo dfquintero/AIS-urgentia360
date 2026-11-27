@@ -68,6 +68,8 @@ export function parsearDataset(c: DatasetCrudo): Dataset {
       triage: e.triage,
       grupoEdad: e.edad,
       demanda: e.demanda,
+      llegadaPor: e.triage === 'I' || e.triage === 'II' ? 'Ambulancia' : 'A pie',
+      conAcompanante: e.edad === '0-17' || e.edad === '65+',
       responsable: e.resp,
       historial,
       destino: e.destino,
@@ -245,12 +247,15 @@ export function generarDatasetRespaldo(semilla = 360, total = 360): Dataset {
       { etapa: 'conducta', llegada: m(fin), entrada: m(fin), salida: m(egreso), responsable: medico },
       { etapa: 'egreso', llegada: m(egreso), entrada: m(egreso), salida: m(egreso), responsable: 'Administrativo' },
     );
+    const grupoEdad = elegir(GRUPOS_EDAD, rand);
     const completo: Episodio = {
       id,
       turno: `TURNO-FICT-${String(i + 1).padStart(5, '0')}`,
       triage,
-      grupoEdad: elegir(GRUPOS_EDAD, rand),
+      grupoEdad,
       demanda: elegir(TIPOS_DEMANDA, rand),
+      llegadaPor: triage === 'I' || triage === 'II' ? elegir(['Ambulancia', 'Ambulancia', 'A pie'], rand) : elegir(['A pie', 'A pie', 'A pie', 'Ambulancia', 'Silla de ruedas'], rand),
+      conAcompanante: grupoEdad === '0-17' || grupoEdad === '65+' ? rand() < 0.8 : rand() < 0.4,
       responsable: medico,
       historial,
       destino: elegir(DESTINOS_EGRESO, rand),

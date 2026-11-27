@@ -1,6 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 
-export type RolUsuario = 'demo' | 'asistencial' | 'coordinacion' | 'analista' | 'acompanante';
+export type RolUsuario = 'demo' | 'recepcion' | 'atencion' | 'coordinacion' | 'acompanante';
 export type Vista =
   | 'resumen'
   | 'etapas'
@@ -25,7 +25,7 @@ export interface PerfilRol {
   configuraUmbrales: boolean;
 }
 
-// Matriz funcional SUGERIDA por Kantera (respuesta 12): no es un esquema de permisos aprobado.
+// Matriz funcional SUGERIDA por el equipo (datos mínimos por rol): no es un esquema de permisos aprobado.
 export const PERFILES: readonly PerfilRol[] = [
   {
     id: 'demo',
@@ -35,25 +35,25 @@ export const PERFILES: readonly PerfilRol[] = [
     configuraUmbrales: true,
   },
   {
-    id: 'asistencial',
-    nombre: 'Médico / Enfermería',
-    descripcion: 'Estado de pacientes y alertas pertinentes',
+    id: 'recepcion',
+    nombre: 'Recepción',
+    descripcion: 'Celador, recepcionista o enfermera de entrada: genera turno y QR con datos básicos',
+    vistas: ['registro'],
+    configuraUmbrales: false,
+  },
+  {
+    id: 'atencion',
+    nombre: 'Atención clínica',
+    descripcion: 'Enfermería, médico y personal diagnóstico: pacientes y su trazabilidad',
     vistas: OPERACION,
     configuraUmbrales: false,
   },
   {
     id: 'coordinacion',
     nombre: 'Coordinación de urgencias',
-    descripcion: 'Cola, capacidad, demoras y umbrales',
+    descripcion: 'Cola, indicadores, demoras y umbrales',
     vistas: [...ANALISIS, ...OPERACION, 'configuracion'],
     configuraUmbrales: true,
-  },
-  {
-    id: 'analista',
-    nombre: 'Directivo / Analista',
-    descripcion: 'Solo indicadores agregados',
-    vistas: ANALISIS,
-    configuraUmbrales: false,
   },
   {
     id: 'acompanante',
@@ -63,6 +63,15 @@ export const PERFILES: readonly PerfilRol[] = [
     configuraUmbrales: false,
   },
 ];
+
+// Responsable registrado por defecto en cada escaneo cuando no se elige uno: identifica el rol, no a una persona.
+export const RESPONSABLE_POR_ROL: Readonly<Record<RolUsuario, string>> = {
+  demo: 'Registro QR',
+  recepcion: 'Recepción · Punto',
+  atencion: 'Equipo asistencial',
+  coordinacion: 'Coordinación',
+  acompanante: 'Registro QR',
+};
 
 const PERFIL_POR_ID = Object.fromEntries(PERFILES.map((p) => [p.id, p])) as Record<RolUsuario, PerfilRol>;
 

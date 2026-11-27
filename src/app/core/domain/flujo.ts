@@ -1,6 +1,7 @@
 import { ETAPA_POR_ID, PERSONAL, TRANSICIONES } from '../data/catalogos';
 import {
   AccionEscaneo,
+  DatosRecepcion,
   DestinoEgreso,
   Episodio,
   EtapaId,
@@ -45,15 +46,17 @@ export function coincideCodigo(e: Episodio, codigo: string): boolean {
   return /^\d{1,5}$/.test(c) && numeroEpisodio(e.id) === Number(c);
 }
 
-/** Turno nuevo generado en Punto 0: queda en espera de triage (obligatorio). */
-export function crearEpisodioNuevo(numero: number, ahora: number, demanda: string, grupoEdad: string): Episodio {
+/** Turno nuevo generado en recepción (Punto 0): queda en espera de triage (obligatorio). */
+export function crearEpisodioNuevo(numero: number, ahora: number, recepcion: DatosRecepcion): Episodio {
   const sufijo = String(numero).padStart(5, '0');
   return {
     id: `DEM-URG-${sufijo}`,
     turno: `TURNO-FICT-${sufijo}`,
     triage: null,
-    grupoEdad,
-    demanda,
+    grupoEdad: recepcion.grupoEdad,
+    demanda: recepcion.demanda,
+    llegadaPor: recepcion.llegadaPor,
+    conAcompanante: recepcion.conAcompanante,
     responsable: PERSONAL.medico[numero % PERSONAL.medico.length],
     historial: [
       nuevoRegistro('punto0', ahora, { entrada: ahora, salida: ahora, responsable: PERSONAL.digiturno[0] }),

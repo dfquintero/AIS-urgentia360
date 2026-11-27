@@ -5,14 +5,21 @@ describe('matriz de roles simulados', () => {
     expect(perfilDe('acompanante').vistas).toEqual(['acompanantes']);
   });
 
-  it('el perfil directivo/analista solo ve indicadores agregados', () => {
-    expect(perfilDe('analista').vistas).toEqual(['resumen', 'etapas', 'horarios', 'perfiles', 'ayudas', 'ans']);
-    expect(perfilDe('analista').configuraUmbrales).toBe(false);
+  it('recepción solo ve Registro QR: genera turnos sin ver datos clínicos', () => {
+    expect(perfilDe('recepcion').vistas).toEqual(['registro']);
+    expect(perfilDe('recepcion').configuraUmbrales).toBe(false);
   });
 
-  it('asistencial ve solo pacientes, registro y trazabilidad; configuración solo para quien configura umbrales', () => {
-    expect(perfilDe('asistencial').vistas).toEqual(['pacientes', 'registro', 'trazabilidad']);
+  it('atención clínica ve pacientes, registro y trazabilidad; configuración solo para quien configura umbrales', () => {
+    expect(perfilDe('atencion').vistas).toEqual(['pacientes', 'registro', 'trazabilidad']);
     for (const p of PERFILES) expect(p.vistas.includes('configuracion')).toBe(p.configuraUmbrales);
+  });
+
+  it('coordinación conserva análisis, operación y configuración', () => {
+    expect(perfilDe('coordinacion').vistas).toEqual([
+      'resumen', 'etapas', 'horarios', 'perfiles', 'ayudas', 'ans',
+      'pacientes', 'registro', 'trazabilidad', 'configuracion',
+    ]);
   });
 
   it('ningún perfil distinto de demostración combina acompañantes con vistas clínicas', () => {

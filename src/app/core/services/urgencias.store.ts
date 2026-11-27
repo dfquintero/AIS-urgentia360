@@ -1,9 +1,9 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { ETAPA_POR_ID, GRUPOS_EDAD, METAS_TRIAGE_INICIALES, ROL_EVENTO, TIPOS_DEMANDA, UMBRALES_INICIALES } from '../data/catalogos';
+import { ETAPA_POR_ID, GRUPOS_EDAD, METAS_TRIAGE_INICIALES, ROL_EVENTO, UMBRALES_INICIALES } from '../data/catalogos';
 import { elegir, faseEvento } from '../data/dataset';
 import { coincideCodigo, crearEpisodioNuevo, numeroEpisodio, registrarEscaneo, registroActual } from '../domain/flujo';
 import { alertaEpisodio, estadoOrden, tiempoEnEtapa, vistaEnTiempo } from '../domain/indicadores';
-import {
+import { DatosRecepcion,
   EstadoOrden,
   Episodio,
   EtapaId,
@@ -141,10 +141,11 @@ export class UrgenciasStore {
     return this.ordenes().filter((o) => o.episodioId === id);
   }
 
-  generarTurno(): Episodio {
-    const episodio = crearEpisodioNuevo(this.siguienteNumero++, this.ahora(), elegir(TIPOS_DEMANDA), elegir(GRUPOS_EDAD));
+  /** Recepción (Punto 0): genera el turno con los datos básicos tomados al recibir al paciente. */
+  generarTurno(recepcion: DatosRecepcion): Episodio {
+    const episodio = crearEpisodioNuevo(this.siguienteNumero++, this.ahora(), recepcion);
     this.manuales.update((m) => new Map(m).set(episodio.id, episodio));
-    this.registrarEvento(episodio.id, 'punto0', 'Turno generado', 'Punto cero del episodio (Digiturno)');
+    this.registrarEvento(episodio.id, 'punto0', 'Turno generado', 'Recepción / Digiturno');
     return episodio;
   }
 
