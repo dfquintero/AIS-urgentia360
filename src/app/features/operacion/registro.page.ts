@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -62,7 +62,20 @@ import { EscanerQr } from './components/escaner-qr';
               <p class="texto-suave aviso-recepcion">Recepción no accede a la historia ni a otros pacientes; el triage lo asigna siempre un profesional de salud.</p>
             </mat-card-content>
           </mat-card>
-          <app-escaner-qr [episodios]="store.activos()" [(codigo)]="codigo" (escanear)="escanear($event)" />
+          @if (puedeEscanear()) {
+            <app-escaner-qr
+              [episodios]="store.activos()"
+              [(codigo)]="codigo"
+              [responsableSugerido]="responsableSugerido()"
+              (escanear)="escanear($event)"
+            />
+          } @else {
+            <mat-card appearance="outlined">
+              <mat-card-content>
+                <p class="texto-suave">Recepción solo genera turnos: el registro de etapas (triage, valoración, egreso) lo hace la atención clínica o la coordinación.</p>
+              </mat-card-content>
+            </mat-card>
+          }
         </div>
         <div class="pila">
           @if (ultimoTurno(); as t) {
@@ -96,12 +109,18 @@ export class RegistroPage {
   protected readonly demandas = TIPOS_DEMANDA;
   protected readonly gruposEdad = GRUPOS_EDAD;
   protected readonly llegadasPor = LLEGADAS_POR;
-  protected readonly recepcion: DatosRecepcion = {
+  private readonly recepcionInicial: DatosRecepcion = {
     demanda: 'General',
     grupoEdad: '18-39',
     llegadaPor: 'A pie',
     conAcompanante: false,
   };
+  protected readonly recepcion: DatosRecepcion = { ...this.recepcionInicial };
+
+  // Recepción no registra hitos clínicos; el resto de roles sí.
+  protected readonly puedeEscanear = computed(() => this.roles.rol() !== 'recepcion');
+  // Responsable registrado cuando no se elige uno en el escáner (el rol, nunca una persona).
+  protected readonly responsableSugerido = computed(() => RESPONSABLE_POR_ROL[this.roles.rol()]);
 
   protected readonly codigo = signal(inject(ActivatedRoute).snapshot.queryParamMap.get('codigo') ?? '');
   protected readonly ultimoTurno = signal<Episodio | null>(null);
@@ -111,6 +130,7 @@ export class RegistroPage {
     this.ultimoTurno.set(episodio);
     this.codigo.set(episodio.turno);
     this.snackBar.open(`Turno ${episodio.turno} generado. Siguiente paso obligatorio: Triage.`, 'OK', { duration: 3000 });
+    Object.assign(this.recepcion, this.recepcionInicial);
   }
 
   protected escanear(solicitud: SolicitudEscaneo): void {
