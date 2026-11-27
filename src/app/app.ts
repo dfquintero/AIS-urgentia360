@@ -22,7 +22,7 @@ import { RedCifrada } from './shared/ui/red-cifrada';
     } @else {
     <header class="barra">
       <a class="barra-marca" routerLink="/inicio" aria-label="Ir a la página de inicio">
-        <span class="marca-simbolo" aria-hidden="true">+</span>
+        <span class="marca-simbolo" aria-hidden="true"></span>
         <span class="marca-nombre">Urgentia 360</span>
       </a>
       <div class="barra-estado">

@@ -17,10 +17,13 @@
     #splash.splash-fuera { opacity: 0; visibility: hidden; }
     .splash-contenido { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; padding: 24px; }
     .splash-simbolo {
-      display: grid; place-items: center; width: 84px; height: 84px; border-radius: 24px; font-size: 58px; font-weight: 800; line-height: 1; color: #fff;
+      position: relative; width: 84px; height: 84px; border-radius: 24px;
       background: linear-gradient(135deg, #3d8bff, #00b4e3 55%, #00d2a0); box-shadow: 0 0 0 6px rgb(255 255 255 / 6%), 0 20px 60px rgb(0 180 227 / 45%);
       animation: splash-latido 1.4s ease-in-out infinite;
     }
+    .splash-simbolo::before, .splash-simbolo::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; border-radius: 999px; }
+    .splash-simbolo::before { width: 66%; height: 22%; }
+    .splash-simbolo::after { width: 22%; height: 66%; }
     #splash .splash-titulo { color: #fff; margin: 0; font-size: clamp(2.6rem, 9vw, 4.6rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1; animation: splash-entrada 0.8s ease-out both; }
     #splash .splash-titulo span { background: linear-gradient(90deg, #00b4e3, #00d2a0); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .splash-lema { margin: 0; color: #9aa8bd; font-size: clamp(0.95rem, 2.6vw, 1.1rem); animation: splash-entrada 0.8s 0.15s ease-out both; }
@@ -35,7 +38,7 @@
 <body>
   <div id="splash" role="status" aria-label="Cargando Urgentia 360">
     <div class="splash-contenido">
-      <div class="splash-simbolo" aria-hidden="true">+</div>
+      <div class="splash-simbolo" aria-hidden="true"></div>
       <h1 class="splash-titulo">Urgentia <span>360</span></h1>
       <p class="splash-lema">Seguimiento operativo de urgencias</p>
       <div class="splash-barra" aria-hidden="true"></div>

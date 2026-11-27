@@ -77,9 +77,16 @@ mat-card.mat-mdc-card { border-radius: 14px; background: #fff; min-width: 0; }
 }
 .barra-marca { display: flex; align-items: center; gap: 10px; }
 .marca-simbolo {
-  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px;
-  background: var(--k-verde); color: #fff; font-size: 28px; font-weight: 700; line-height: 1;
+  position: relative; display: inline-block; flex: none; width: 36px; height: 36px; border-radius: 10px;
+  background: var(--k-verde); color: #fff;
 }
+// Cruz dibujada con dos barras centradas: no depende de la fuente y escala con el tamaño del símbolo.
+.marca-simbolo::before, .marca-simbolo::after {
+  content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  background: currentColor; border-radius: 999px;
+}
+.marca-simbolo::before { width: 66%; height: 22%; }
+.marca-simbolo::after { width: 22%; height: 66%; }
 .marca-nombre { font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em; }
 .marca-sub { font-size: 0.8rem; opacity: 0.85; }
 .barra-estado { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
@@ -306,7 +313,7 @@ a.barra-marca { color: inherit; text-decoration: none; }
   padding: 14px clamp(16px, 4vw, 48px); background: rgb(5 10 23 / 70%); backdrop-filter: blur(14px); border-bottom: 1px solid var(--l-borde);
 }
 .landing-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; color: #fff; }
-.landing-logo .marca-simbolo { width: 30px; height: 30px; font-size: 22px; border-radius: 9px; }
+.landing-logo .marca-simbolo { width: 30px; height: 30px; border-radius: 9px; }
 .landing-enlaces { display: flex; gap: 4px; }
 .landing-enlaces button { background: none; border: 0; color: var(--l-suave); font: inherit; font-size: 0.92rem; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
 .landing-enlaces button:hover { color: #fff; background: var(--l-panel); }
