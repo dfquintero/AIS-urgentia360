@@ -7,8 +7,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#002F87">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    #splash {
+      position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden;
+      background: radial-gradient(60% 50% at 50% 40%, rgb(61 139 255 / 22%), transparent 70%), radial-gradient(40% 40% at 70% 70%, rgb(0 210 160 / 14%), transparent 70%), #050a17;
+      color: #e8eef8; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #splash.splash-fuera { opacity: 0; visibility: hidden; }
+    .splash-contenido { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; padding: 24px; }
+    .splash-simbolo {
+      display: grid; place-items: center; width: 84px; height: 84px; border-radius: 24px; font-size: 58px; font-weight: 800; line-height: 1; color: #fff;
+      background: linear-gradient(135deg, #3d8bff, #00b4e3 55%, #00d2a0); box-shadow: 0 0 0 6px rgb(255 255 255 / 6%), 0 20px 60px rgb(0 180 227 / 45%);
+      animation: splash-latido 1.4s ease-in-out infinite;
+    }
+    #splash .splash-titulo { color: #fff; margin: 0; font-size: clamp(2.6rem, 9vw, 4.6rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1; animation: splash-entrada 0.8s ease-out both; }
+    #splash .splash-titulo span { background: linear-gradient(90deg, #00b4e3, #00d2a0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .splash-lema { margin: 0; color: #9aa8bd; font-size: clamp(0.95rem, 2.6vw, 1.1rem); animation: splash-entrada 0.8s 0.15s ease-out both; }
+    .splash-barra { width: min(220px, 60vw); height: 4px; border-radius: 4px; background: rgb(255 255 255 / 10%); overflow: hidden; }
+    .splash-barra::after { content: ''; display: block; width: 40%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #3d8bff, #00d2a0); animation: splash-carga 1.1s ease-in-out infinite; }
+    @keyframes splash-latido { 50% { transform: scale(1.06); } }
+    @keyframes splash-entrada { from { opacity: 0; transform: translateY(12px); } }
+    @keyframes splash-carga { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+    @media (prefers-reduced-motion: reduce) { #splash, #splash * { animation: none !important; transition: none !important; } }
+  </style>
 </head>
 <body>
+  <div id="splash" role="status" aria-label="Cargando Urgentia 360">
+    <div class="splash-contenido">
+      <div class="splash-simbolo" aria-hidden="true">+</div>
+      <h1 class="splash-titulo">Urgentia <span>360</span></h1>
+      <p class="splash-lema">Seguimiento operativo de urgencias</p>
+      <div class="splash-barra" aria-hidden="true"></div>
+    </div>
+  </div>
   <app-root></app-root>
 </body>
 </html>
