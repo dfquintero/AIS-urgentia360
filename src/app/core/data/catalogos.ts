@@ -2,7 +2,7 @@ import { DestinoEgreso, Etapa, EtapaId, MetasTriage, NivelTriageId, RolPersonal,
 
 // Etapas alineadas con los hitos de la base sintética UNAL–Kantera.
 export const ETAPAS: readonly Etapa[] = [
-  { id: 'punto0', nombre: 'Punto 0 · Generación de turno', corto: 'Punto 0', rol: 'digiturno', sistema: 'Sofía / Digiturno' },
+  { id: 'punto0', nombre: 'Recepción · Turno y QR', corto: 'Recepción', rol: 'digiturno', sistema: 'Sofía / Digiturno' },
   { id: 'triage', nombre: 'Triage', corto: 'Triage', rol: 'enfermeria', sistema: 'HIS/Athenea', obligatoria: true },
   { id: 'admision', nombre: 'Admisión', corto: 'Admisión', rol: 'admisiones', sistema: 'HIS/Athenea' },
   { id: 'valoracion', nombre: 'Primera valoración médica', corto: 'Valoración', rol: 'medico', sistema: 'HIS/Athenea' },
@@ -34,7 +34,15 @@ export const ETIQUETA_TRANSICION: Readonly<Record<string, string>> = {
   'revaloracion>ayudas': 'Nuevas ayudas diagnósticas',
 };
 
-export const DESTINOS_EGRESO: readonly DestinoEgreso[] = ['Alta', 'Hospitalización', 'Remisión', 'Otro'];
+export const DESTINOS_EGRESO: readonly DestinoEgreso[] = [
+  'Alta a casa',
+  'Hospitalización / UCI',
+  'Remisión a otro servicio',
+  'Otro',
+];
+
+// Datos básicos de recepción (Punto 0): no son información clínica.
+export const LLEGADAS_POR: readonly string[] = ['A pie', 'Ambulancia', 'Silla de ruedas'];
 
 // Umbrales ILUSTRATIVOS (minutos en la etapa, espera + atención) hasta validación institucional.
 export const UMBRALES_INICIALES: Readonly<Umbrales> = {
@@ -57,7 +65,7 @@ const codigos = (prefijo: string, n: number) =>
   Array.from({ length: n }, (_, i) => `${prefijo}-FICT-${String(i + 1).padStart(2, '0')}`);
 
 export const PERSONAL: Readonly<Record<RolPersonal, readonly string[]>> = {
-  digiturno: ['Digiturno · Kiosko 1', 'Digiturno · Kiosko 2'],
+  digiturno: ['Recepción · Punto 1', 'Recepción · Punto 2'],
   enfermeria: codigos('ENF', 6),
   admisiones: codigos('ADM', 4),
   medico: codigos('MED', 12),

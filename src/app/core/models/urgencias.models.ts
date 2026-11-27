@@ -16,7 +16,7 @@ export type NivelAlerta = 'ok' | 'amarillo' | 'rojo';
 
 export type AccionEscaneo = 'entrada' | 'salida';
 
-export type DestinoEgreso = 'Alta' | 'Hospitalización' | 'Remisión' | 'Otro';
+export type DestinoEgreso = 'Alta a casa' | 'Hospitalización / UCI' | 'Remisión a otro servicio' | 'Otro';
 
 export type EstadoOrden = 'Solicitada' | 'En proceso' | 'Disponible' | 'Revisada';
 
@@ -45,10 +45,22 @@ export interface Episodio {
   triage: NivelTriageId | null;
   grupoEdad: string;
   demanda: string;
+  /** Cómo llegó a recepción (dato básico, no clínico). */
+  llegadaPor?: string;
+  /** Si llegó con acompañante (dato básico, no clínico). */
+  conAcompanante?: boolean;
   responsable: string;
   historial: RegistroEtapa[];
   destino?: DestinoEgreso | null;
   egreso?: number;
+}
+
+/** Datos básicos que toma recepción al generar el turno (no es atención clínica). */
+export interface DatosRecepcion {
+  demanda: string;
+  grupoEdad: string;
+  llegadaPor: string;
+  conAcompanante: boolean;
 }
 
 export interface OrdenDiagnostica {
